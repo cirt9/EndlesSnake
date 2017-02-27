@@ -6,6 +6,7 @@
 #include <QPointer>
 #include <QGraphicsRectItem>
 #include <button.h>
+#include <QScopedPointer>
 
 class Game : public QGraphicsView
 {
