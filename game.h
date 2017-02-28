@@ -7,6 +7,7 @@
 #include <QGraphicsRectItem>
 #include <button.h>
 #include <QScopedPointer>
+#include <wall.h>
 
 class Game : public QGraphicsView
 {
@@ -21,6 +22,9 @@ private:
 public:
     Game(int width = 1024, int height = 768, QWidget * /*parent*/ = nullptr);
     ~Game() {}
+
+private slots:
+    void startGame();
 
 public slots:
     void displayMainMenu();

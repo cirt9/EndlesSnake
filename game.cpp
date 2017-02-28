@@ -5,7 +5,7 @@ Game::Game(int width, int height, QWidget * /*parent*/)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(width,height);
-    showFullScreen();
+    //showFullScreen();
 
     initScene(0, 0, width, height);
 }
@@ -35,7 +35,7 @@ void Game::displayMainMenu()
     playButton->setButtonColor(QColor(67, 139, 60));
     playButton->setHoverButtonColor(QColor(92, 165, 94));
     playButton->setFontColor(QColor(0, 50, 0));
-    //connect(playButton, SIGNAL(), this, SLOT());
+    connect(playButton, SIGNAL(clicked()), this, SLOT(startGame()));
     scene->addItem(playButton);
 
     Button * scoresButton = new Button(QString("Scores"), this->width()/5, this->height()/18, this->width()/50);
@@ -60,6 +60,16 @@ void Game::displayMainMenu()
     author->setDefaultTextColor(QColor(107,142,35));
     author->setPos(this->width() - author->boundingRect().width(), this->height() - author->boundingRect().height());
     scene->addItem(author);
+}
+
+void Game::startGame()
+{
+    scene->clear();
+
+    Wall * leftWall = new Wall(0, 0, this->width()/4, this->height(), QColor(0, 70, 0));
+    scene->addItem(leftWall);
+    Wall * rightWall = new Wall(this->width() - this->width()/4, 0, this->width()/4, this->height(), QColor(0, 70, 0));
+    scene->addItem(rightWall);
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

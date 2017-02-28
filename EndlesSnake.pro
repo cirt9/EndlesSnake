@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         game.cpp \
-    button.cpp
+    button.cpp \
+    wall.cpp
 
 HEADERS  += game.h \
-    button.h
+    button.h \
+    wall.h
 
 FORMS    +=
