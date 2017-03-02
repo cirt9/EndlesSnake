@@ -6,7 +6,9 @@
 #include <QPointer>
 #include <QGraphicsRectItem>
 #include <button.h>
-#include <QScopedPointer>
+#include <QScrollBar>
+
+#include <snake.h>
 #include <wall.h>
 
 class Game : public QGraphicsView

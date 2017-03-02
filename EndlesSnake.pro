@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         game.cpp \
     button.cpp \
-    wall.cpp
+    wall.cpp \
+    snake.cpp
 
 HEADERS  += game.h \
     button.h \
-    wall.h
+    wall.h \
+    snake.h
 
 FORMS    +=

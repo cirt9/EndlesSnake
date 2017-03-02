@@ -2,9 +2,13 @@
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
+    horizontalScrollBar()->setEnabled(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    verticalScrollBar()->setEnabled(false);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     setFixedSize(width,height);
+    setSceneRect(0, 0, width-5, height-5);
     //showFullScreen();
 
     initScene(0, 0, width, height);
@@ -24,7 +28,7 @@ void Game::displayMainMenu()
     scene->clear();
 
     QGraphicsTextItem * title = new QGraphicsTextItem(QString("EndlesSnake"));
-    QFont titleFont("times new roman", 80);
+    QFont titleFont("times new roman", this->width()/15);
     title->setFont(titleFont);
     title->setDefaultTextColor(QColor(107, 142, 35));
     title->setPos(this->width()/2 - title->boundingRect().width()/2, this->height()/16);
@@ -70,6 +74,11 @@ void Game::startGame()
     scene->addItem(leftWall);
     Wall * rightWall = new Wall(this->width() - this->width()/4, 0, this->width()/4, this->height(), QColor(0, 70, 0));
     scene->addItem(rightWall);
+
+    Snake * snake = new Snake();
+    snake->setFlag(QGraphicsItem::ItemIsFocusable);
+    snake->setFocus();
+    scene->addItem(snake);
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
