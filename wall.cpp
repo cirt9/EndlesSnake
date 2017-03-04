@@ -1,9 +1,34 @@
 #include "wall.h"
 
-Wall::Wall(int x, int y, int width, int height, QColor color, QGraphicsItem *parent) : QGraphicsRectItem(parent)
+Wall::Wall(int wallX, int wallY, int wallWidth, int wallHeight, QColor color, QGraphicsItem *parent) : QGraphicsRectItem(parent)
 {
+    x = wallX;
+    y = wallY;
+    width = wallWidth;
+    height = wallHeight;
+
     setRect(x, y, width, height);
 
     QBrush wallColor(color);
     setBrush(wallColor);
+}
+
+int Wall::getWidth() const
+{
+    return width;
+}
+
+int Wall::getHeight() const
+{
+    return height;
+}
+
+int Wall::getX() const
+{
+    return x;
+}
+
+int Wall::getY() const
+{
+    return y;
 }

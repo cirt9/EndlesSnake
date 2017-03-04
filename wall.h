@@ -6,9 +6,20 @@
 
 class Wall : public QGraphicsRectItem
 {
+private:
+    int x;
+    int y;
+    int width;
+    int height;
+
 public:
-    Wall(int x, int y, int width, int height, QColor color, QGraphicsItem * parent = nullptr);
+    Wall(int wallX, int wallY, int wallWidth, int wallHeight, QColor color, QGraphicsItem * parent = nullptr);
     ~Wall() {}
+
+    int getWidth() const;
+    int getHeight() const;
+    int getX() const;
+    int getY() const;
 };
 
 #endif // WALL_H
