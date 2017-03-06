@@ -1,11 +1,12 @@
 #include "snake.h"
 
-Snake::Snake(int movementSpeed, QGraphicsItem *parent) : QGraphicsRectItem(parent)
+Snake::Snake(int movementSpeed, int snakeSize, int x, int y, QColor snakeColor, QGraphicsItem *parent) : QGraphicsRectItem(parent)
 {
-    setRect(0, 0, 70, 70);
-    setPos(800, 700);
-    QBrush snakeColor(QColor(0,0,0));
-    setBrush(snakeColor);
+    setRect(0, 0, snakeSize, snakeSize);
+    setPos(x, y);
+    QBrush color(snakeColor);
+    setBrush(color);
+    setPen(Qt::NoPen);
 
     speed = movementSpeed;
 }

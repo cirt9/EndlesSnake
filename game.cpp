@@ -70,12 +70,10 @@ void Game::startGame()
 {
     scene->clear();
 
-    Wall * leftWall = new Wall(0, 0, this->width()/3, this->height(), QColor(0, 70, 0));
-    scene->addItem(leftWall);
-    Wall * rightWall = new Wall(this->width() - this->width()/3, 0, this->width()/3, this->height(), QColor(0, 70, 0));
-    scene->addItem(rightWall);
+    PlayingField * playingField = new PlayingField(this->width(), this->height());
+    scene->addItem(playingField);
 
-    Snake * snake = new Snake(20);
+    Snake * snake = new Snake(20, 70, this->width()/2-70/2, 900, QColor(0, 0, 0));
     snake->setFlag(QGraphicsItem::ItemIsFocusable);
     snake->setFocus();
     scene->addItem(snake);

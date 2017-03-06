@@ -11,6 +11,7 @@ Wall::Wall(int wallX, int wallY, int wallWidth, int wallHeight, QColor color, QG
 
     QBrush wallColor(color);
     setBrush(wallColor);
+    setPen(Qt::NoPen);
 }
 
 int Wall::getWidth() const

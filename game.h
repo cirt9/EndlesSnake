@@ -7,9 +7,8 @@
 #include <QGraphicsRectItem>
 #include <button.h>
 #include <QScrollBar>
-
+#include <playingfield.h>
 #include <snake.h>
-#include <wall.h>
 
 class Game : public QGraphicsView
 {
