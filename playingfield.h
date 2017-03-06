@@ -9,7 +9,6 @@
 class PlayingField : public QGraphicsRectItem
 {
 private:
-//player
     Wall * leftWall;
     QGraphicsRectItem * mainField;
     Wall * rightWall;
@@ -19,7 +18,7 @@ private:
 
 public:
     PlayingField(int screenWidth, int screenHeight, QGraphicsItem * parent = nullptr);
-    ~PlayingField();
+    ~PlayingField() {}
 };
 
 #endif // PLAYINGFIELD_H

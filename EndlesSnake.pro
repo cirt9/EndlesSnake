@@ -17,12 +17,14 @@ SOURCES += main.cpp\
     button.cpp \
     wall.cpp \
     snake.cpp \
-    playingfield.cpp
+    playingfield.cpp \
+    player.cpp
 
 HEADERS  += game.h \
     button.h \
     wall.h \
     snake.h \
-    playingfield.h
+    playingfield.h \
+    player.h
 
 FORMS    +=

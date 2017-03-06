@@ -30,10 +30,3 @@ void PlayingField::setWalls(int width, int height, QColor wallColor)
     leftWall = new Wall(0, 0, wallWidth, height, wallColor, this);
     rightWall = new Wall(rightWallX, 0, wallWidth, height, wallColor, this);
 }
-
-PlayingField::~PlayingField()
-{
-    leftWall = nullptr;
-    mainField = nullptr;
-    rightWall = nullptr;
-}

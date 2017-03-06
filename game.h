@@ -8,7 +8,7 @@
 #include <button.h>
 #include <QScrollBar>
 #include <playingfield.h>
-#include <snake.h>
+#include <player.h>
 
 class Game : public QGraphicsView
 {
@@ -16,6 +16,7 @@ class Game : public QGraphicsView
 
 private:
     QGraphicsScene * scene;
+    PlayingField * playingField;
 
     void initScene(int x, int y, int width, int height);
     void drawPanel(int x, int y, int width, int height, QColor color, double opacity = 1.0);

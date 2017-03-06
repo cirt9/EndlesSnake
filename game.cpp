@@ -9,7 +9,7 @@ Game::Game(int width, int height, QWidget * /*parent*/)
 
     setFixedSize(width,height);
     setSceneRect(0, 0, width-5, height-5);
-    //showFullScreen();
+    showFullScreen();
 
     initScene(0, 0, width, height);
 }
@@ -70,13 +70,15 @@ void Game::startGame()
 {
     scene->clear();
 
-    PlayingField * playingField = new PlayingField(this->width(), this->height());
+    playingField = new PlayingField(this->width(), this->height());
     scene->addItem(playingField);
 
-    Snake * snake = new Snake(20, 70, this->width()/2-70/2, 900, QColor(0, 0, 0));
-    snake->setFlag(QGraphicsItem::ItemIsFocusable);
-    snake->setFocus();
-    scene->addItem(snake);
+    Player * player = new Player(this->width(), this->height());
+    player->setPlayerCharacter(20, 70, this->width()/2-70/2, 900, QColor(0, 0, 0));
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+    scene->addItem(player);
+    connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
