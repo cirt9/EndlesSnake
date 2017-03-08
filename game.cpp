@@ -1,4 +1,5 @@
 #include "game.h"
+#include <food.h>
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
@@ -74,11 +75,18 @@ void Game::startGame()
     scene->addItem(playingField);
 
     Player * player = new Player(this->width(), this->height());
-    player->setPlayerCharacter(20, 70, this->width()/2-70/2, 900, QColor(0, 0, 0));
+    player->setPlayerCharacter(20, 70, this->width()/2-70/2, 1000, QColor(0, 0, 0));
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     scene->addItem(player);
     connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
+
+    QTimer * timer = new QTimer(this);
+    timer->start(3);
+
+    Food * food = new Food(30, 30, 1, this->width(), this->height(), QColor(110, 30, 0), timer);
+    food->setPos(this->width()/2, 100);
+    scene->addItem(food);
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

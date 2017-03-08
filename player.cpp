@@ -2,7 +2,7 @@
 
 Player::Player(int screenWidth, int screenHeight, QGraphicsItem * parent) : QGraphicsRectItem(parent)
 {
-    setRect(0, 0, screenWidth, screenWidth);
+    setRect(0, 0, screenWidth, screenHeight);
     setPen(Qt::NoPen);
 
     playerName = QString("I'm the best");
