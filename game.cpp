@@ -87,6 +87,14 @@ void Game::startGame()
     Food * food = new Food(30, 30, 1, this->width(), this->height(), QColor(110, 30, 0), timer);
     food->setPos(this->width()/2, 100);
     scene->addItem(food);
+
+    Food * food1 = new Food(30, 30, 1, this->width(), this->height(), QColor(110, 30, 0), timer);
+    food1->setPos(this->width()/2, 300);
+    scene->addItem(food1);
+
+    Food * food2 = new Food(30, 30, 1, this->width(), this->height(), QColor(110, 30, 0), timer);
+    food2->setPos(this->width()/2, 500);
+    scene->addItem(food2);
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

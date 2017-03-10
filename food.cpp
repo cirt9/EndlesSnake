@@ -33,7 +33,8 @@ void Food::handleCollisionWithPlayer()
         if(typeid(*collidingItem) == typeid(Snake))
         {
             Snake * collidingPlayer = dynamic_cast<Snake *>(collidingItem);
-            //collidinPlayer->grow();
+
+            collidingPlayer->grow();
 
             this->deleteLater();
             break;

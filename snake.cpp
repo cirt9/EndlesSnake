@@ -2,13 +2,15 @@
 
 Snake::Snake(int movementSpeed, int snakeSize, int x, int y, QColor snakeColor, QGraphicsItem *parent) : QGraphicsRectItem(parent)
 {
-    setRect(0, 0, snakeSize, snakeSize);
+    speed = movementSpeed;
+    snakeLength = snakeSize;
+    snakeWidth = snakeSize;
+
+    setRect(0, 0, snakeWidth, snakeLength);
     setPos(x, y);
     QBrush color(snakeColor);
     setBrush(color);
     setPen(Qt::NoPen);
-
-    speed = movementSpeed;
 }
 
 void Snake::keyPressEvent(QKeyEvent *event)
@@ -60,6 +62,14 @@ void Snake::handleCollisionWithWallWhenMovingRight()
             break;
         }
     }
+}
+
+void Snake::grow()
+{
+    snakeLength += lengthGrowth;
+
+    setRect(0, 0, snakeWidth, snakeLength);
+    setPos(x(), y() - lengthGrowth);
 }
 
 
