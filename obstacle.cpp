@@ -1,20 +1,21 @@
-#include "food.h"
+#include "obstacle.h"
 
-Food::Food(int foodWidth, int foodHeight, int speed, int screenW, int screenH, QColor color,  QTimer * timer, QGraphicsItem * parent) : QGraphicsRectItem(parent)
+Obstacle::Obstacle(int obstacleWidth, int obstacleHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer, QGraphicsItem * parent) : QGraphicsRectItem(parent)
 {
+    moveTimer = timer;
     moveSpeed = speed;
     screenWidth = screenW;
     screenHeight = screenH;
 
-    setRect(0, 0, foodWidth, foodHeight);
+    setRect(0, 0, obstacleWidth, obstacleHeight);
 
     setBrush(QBrush(color));
     setPen(Qt::NoPen);
 
-    connect(timer, SIGNAL(timeout()), this, SLOT(move()));
+    connect(moveTimer, SIGNAL(timeout()), this, SLOT(move()));
 }
 
-void Food::move()
+void Obstacle::move()
 {
     setPos(x(), y() + moveSpeed);
     handleCollisionWithPlayer();
@@ -23,7 +24,7 @@ void Food::move()
         this->deleteLater();
 }
 
-void Food::handleCollisionWithPlayer()
+void Obstacle::handleCollisionWithPlayer()
 {
     QList<QGraphicsItem *> collidesWith = collidingItems();
 
@@ -33,9 +34,9 @@ void Food::handleCollisionWithPlayer()
         {
             Snake * collidingPlayer = dynamic_cast<Snake *>(collidingItem);
 
-            collidingPlayer->grow();
+            disconnect(moveTimer, SIGNAL(timeout()), this, SLOT(move()));
+            emit collidingPlayer->defeated();
 
-            this->deleteLater();
             break;
         }
     }

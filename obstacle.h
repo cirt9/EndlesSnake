@@ -1,5 +1,5 @@
-#ifndef FOOD_H
-#define FOOD_H
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
 
 #include <QGraphicsRectItem>
 #include <QBrush>
@@ -9,11 +9,12 @@
 #include <typeinfo>
 #include <snake.h>
 
-class Food : public QObject, public QGraphicsRectItem
+class Obstacle : public QObject, public QGraphicsRectItem
 {
     Q_OBJECT
 
 private:
+    QTimer * moveTimer;
     int moveSpeed;
     int screenWidth;
     int screenHeight;
@@ -24,7 +25,7 @@ private slots:
     void move();
 
 public:
-    Food(int foodWidth, int foodHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer, QGraphicsItem * parent = nullptr);
+    Obstacle(int obstacleWidth, int obstacleHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer, QGraphicsItem * parent = nullptr);
 };
 
-#endif // FOOD_H
+#endif // OBSTACLE_H

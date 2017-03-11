@@ -25,6 +25,8 @@ public:
     void setPlayerName(QString name);
     void increaseScore(int increase);
 
+    Snake * getPlayerCharacter() const;
+
 signals:
     void escapeClicked();
 };

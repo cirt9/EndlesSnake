@@ -9,6 +9,7 @@
 #include <QScrollBar>
 #include <playingfield.h>
 #include <player.h>
+#include <snake.h>
 
 class Game : public QGraphicsView
 {

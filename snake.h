@@ -9,8 +9,10 @@
 #include <wall.h>
 #include <QPen>
 
-class Snake : public QGraphicsRectItem
+class Snake : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
+
 private:
     const int lengthGrowth = 30;
 
@@ -28,6 +30,9 @@ public:
     void grow();
 
     void keyPressEvent(QKeyEvent * event = nullptr);
+
+signals:
+    void defeated();
 };
 
 #endif // SNAKE_H
