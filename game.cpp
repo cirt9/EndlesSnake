@@ -1,6 +1,4 @@
 #include "game.h"
-#include <food.h>
-#include <obstacle.h>
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
@@ -12,6 +10,8 @@ Game::Game(int width, int height, QWidget * /*parent*/)
     setFixedSize(width,height);
     setSceneRect(0, 0, width-5, height-5);
     showFullScreen();
+
+    qsrand(QTime::currentTime().msec());
 
     initScene(0, 0, width, height);
 }
@@ -72,34 +72,18 @@ void Game::startGame()
 {
     scene->clear();
 
-    playingField = new PlayingField(this->width(), this->height());
+    playingField = new PlayingField(this->width(), this->height(), player);
     scene->addItem(playingField);
 
-    Player * player = new Player(this->width(), this->height());
+    player = new Player(this->width(), this->height());
     player->setPlayerCharacter(20, 70, this->width()/2-70/2, 1000, QColor(0, 0, 0));
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     scene->addItem(player);
     connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
 
-    QTimer * timer = new QTimer(this);
-    timer->start(3);
-
-    Food * food = new Food(30, 30, 1, this->width(), this->height(), QColor(255, 255, 0), timer);
-    food->setPos(this->width()/2, 100);
-    scene->addItem(food);
-
-    Food * food1 = new Food(30, 30, 1, this->width(), this->height(), QColor(255, 255, 0), timer);
-    food1->setPos(this->width()/2, 300);
-    scene->addItem(food1);
-
-    Food * food2 = new Food(30, 30, 1, this->width(), this->height(), QColor(255, 255, 0), timer);
-    food2->setPos(this->width()/2, 500);
-    scene->addItem(food2);
-
-    Obstacle * obstacle = new Obstacle(100, 30, 1, this->width(), this->height(), QColor(153, 0, 0), timer);
-    obstacle->setPos(this->width()/2, 50);
-    scene->addItem(obstacle);
+    playingField->spawnFood();
+    playingField->spawnObstacle();
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
