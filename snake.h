@@ -29,6 +29,9 @@ public:
 
     void grow();
 
+    int getSnakeLength() const;
+    int getSnakeWidth() const;
+
     void keyPressEvent(QKeyEvent * event = nullptr);
 
 signals:

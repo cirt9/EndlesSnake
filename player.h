@@ -23,9 +23,12 @@ public:
 
     void setPlayerCharacter(int movementSpeed, int characterSize, int x, int y,  QColor characterColor);
     void setPlayerName(QString name);
-    void increaseScore(int increase);
 
     Snake * getPlayerCharacter() const;
+    int getScore() const;
+
+public slots:
+    void increaseScore(int increase);
 
 signals:
     void escapeClicked();

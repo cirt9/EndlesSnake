@@ -72,4 +72,14 @@ void Snake::grow()
     setPos(x(), y() - lengthGrowth);
 }
 
+int Snake::getSnakeLength() const
+{
+    return snakeLength;
+}
+
+int Snake::getSnakeWidth() const
+{
+    return snakeWidth;
+}
+
 

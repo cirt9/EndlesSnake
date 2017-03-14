@@ -20,7 +20,9 @@ private:
     QGraphicsRectItem * mainField;
     Wall * rightWall;
     Player * player;
+
     QTimer * moveTimer;
+    QTimer * spawnAndScoreTimer;
 
     int screenWidth;
     int screenHeight;
@@ -28,16 +30,21 @@ private:
     void setMainField(int width, int height, QColor color);
     void setWalls(int width, int height, QColor wallColor);
 
+    void spawnFood();
     void setPositionOfFood(Food * food);
 
-    void setPositionOfObstacle(Obstacle * obstacle);
+    void setPositionOfObstacle(Obstacle * obstacle, int x = -1, int y = -1);
+
+private slots:
+    void spawner();
 
 public:
     PlayingField(int screenW, int screenH, Player * playerAddress, QGraphicsItem * parent = nullptr);
     ~PlayingField() {}
 
-    void spawnFood();
+    void spawnMustToCatchFood();
     void spawnObstacle();
+
 };
 
 #endif // PLAYINGFIELD_H

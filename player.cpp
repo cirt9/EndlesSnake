@@ -34,7 +34,12 @@ void Player::keyPressEvent(QKeyEvent *event)
         emit escapeClicked();
 }
 
-Snake *Player::getPlayerCharacter() const
+Snake * Player::getPlayerCharacter() const
 {
     return playerCharacter;
+}
+
+int Player::getScore() const
+{
+    return score;
 }

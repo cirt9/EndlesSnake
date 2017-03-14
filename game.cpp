@@ -72,18 +72,19 @@ void Game::startGame()
 {
     scene->clear();
 
-    playingField = new PlayingField(this->width(), this->height(), player);
-    scene->addItem(playingField);
-
     player = new Player(this->width(), this->height());
     player->setPlayerCharacter(20, 70, this->width()/2-70/2, 1000, QColor(0, 0, 0));
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
+    player->setZValue(1);
     scene->addItem(player);
     connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
 
-    playingField->spawnFood();
-    playingField->spawnObstacle();
+    playingField = new PlayingField(this->width(), this->height(), player);
+    scene->addItem(playingField);
+
+    //playingField->spawnMustToCatchFood();
+    //playingField->spawnObstacle();
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
