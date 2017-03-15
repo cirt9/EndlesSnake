@@ -24,16 +24,21 @@ private:
     QTimer * moveTimer;
     QTimer * spawnAndScoreTimer;
 
+    const int pointsPerTimeout = 5;
+    const int numberOfmsUntilSpawnTimeout = 100;
+    const int numberOfmsUntilMoveTimeout = 3;
+
     int screenWidth;
     int screenHeight;
 
     void setMainField(int width, int height, QColor color);
     void setWalls(int width, int height, QColor wallColor);
 
+    void spawnMustToCatchFood();
     void spawnFood();
     void setPositionOfFood(Food * food);
 
-    void setPositionOfObstacle(Obstacle * obstacle, int x = -1, int y = -1);
+    void setRandomPositionToObstacle(Obstacle * obstacle);
 
 private slots:
     void spawner();
@@ -42,8 +47,8 @@ public:
     PlayingField(int screenW, int screenH, Player * playerAddress, QGraphicsItem * parent = nullptr);
     ~PlayingField() {}
 
-    void spawnMustToCatchFood();
     void spawnObstacle();
+    void startMovingAndSpawningObjects();
 
 };
 

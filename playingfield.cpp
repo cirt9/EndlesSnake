@@ -9,18 +9,11 @@ PlayingField::PlayingField(int screenW, int screenH, Player * playerAddress, QGr
     screenWidth = screenW;
     screenHeight  = screenH;
 
-    moveTimer = new QTimer(this);
-    moveTimer->start(3);
+    moveTimer = nullptr;
+    spawnAndScoreTimer = nullptr;
 
     setMainField(screenW, screenHeight, QColor(56, 122, 54));
     setWalls(screenW, screenHeight, QColor(0, 70, 0));
-
-
-    spawnAndScoreTimer = new QTimer(this);
-    spawnAndScoreTimer->start(100);
-
-    connect(spawnAndScoreTimer, &QTimer::timeout, this, [this]{player->increaseScore(5);} );
-    connect(spawnAndScoreTimer, SIGNAL(timeout()), this, SLOT(spawner()));
 }
 
 void PlayingField::setMainField(int width, int height, QColor color)
@@ -47,9 +40,23 @@ void PlayingField::setWalls(int width, int height, QColor wallColor)
     rightWall = new Wall(rightWallX, 0, wallWidth, height, wallColor, this);
 }
 
+void PlayingField::startMovingAndSpawningObjects()
+{
+    moveTimer = new QTimer(this);
+    moveTimer->start(numberOfmsUntilMoveTimeout);
+
+    spawnAndScoreTimer = new QTimer(this);
+    spawnAndScoreTimer->start(numberOfmsUntilSpawnTimeout);
+
+    connect(spawnAndScoreTimer, &QTimer::timeout, this, [this]{player->increaseScore(pointsPerTimeout);} );
+    connect(spawnAndScoreTimer, SIGNAL(timeout()), this, SLOT(spawner()));
+}
+
 void PlayingField::spawner()
 {
-    if(player->getScore() % 100 == 0)
+    int pointsToSpawnMustToCatchFood = 200;
+
+    if(player->getScore() % pointsToSpawnMustToCatchFood == 0)
         spawnMustToCatchFood();
 
     //spawn obstacles but player must have possibility to avoid obstacles
@@ -96,20 +103,14 @@ void PlayingField::spawnObstacle()
     int obstacleSpeed = 1;
     Obstacle * newObstacle = new Obstacle(obstacleWidth, obstacleHeight, obstacleSpeed, screenWidth, screenHeight, QColor(153, 0, 0), moveTimer, this);
 
-    setPositionOfObstacle(newObstacle);
+    setRandomPositionToObstacle(newObstacle);
 }
 
-void PlayingField::setPositionOfObstacle(Obstacle *obstacle, int x, int y)
+void PlayingField::setRandomPositionToObstacle(Obstacle *obstacle)
 {
-    int positionX = x;
-    int positionY = y;
-
-    if(x < 0 || y < 0)
-    {
-        int randomRange = mainField->rect().width() - obstacle->rect().width();
-        positionX = mainField->x() + rand() % randomRange;
-        positionY = 0;
-    }
+    int randomRange = mainField->rect().width() - obstacle->rect().width();
+    int positionX = mainField->x() + rand() % randomRange;
+    int positionY = 0;
 
     obstacle->setPos(positionX, positionY);
 }

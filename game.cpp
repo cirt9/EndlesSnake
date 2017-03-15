@@ -82,9 +82,7 @@ void Game::startGame()
 
     playingField = new PlayingField(this->width(), this->height(), player);
     scene->addItem(playingField);
-
-    //playingField->spawnMustToCatchFood();
-    //playingField->spawnObstacle();
+    playingField->startMovingAndSpawningObjects();
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
