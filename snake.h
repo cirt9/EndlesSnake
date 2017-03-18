@@ -14,7 +14,7 @@ class Snake : public QObject, public QGraphicsRectItem
     Q_OBJECT
 
 private:
-    const int lengthGrowth = 30;
+    int lengthGrowth;
 
     int speed;
     int snakeLength;

@@ -11,6 +11,12 @@ int main(int argc, char *argv[])
     int screenWidth = screenGeometry.width();
     int screenHeight = screenGeometry.height();
 
+    if(screenWidth < 800 || screenHeight < 600)
+    {
+        screenWidth = 800;
+        screenHeight = 600;
+    }
+
     QPointer<Game> game(new Game(screenWidth, screenHeight));
     game->show();
     game->displayMainMenu();

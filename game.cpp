@@ -72,17 +72,29 @@ void Game::startGame()
 {
     scene->clear();
 
-    player = new Player(this->width(), this->height());
-    player->setPlayerCharacter(20, 70, this->width()/2-70/2, 1000, QColor(0, 0, 0));
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-    player->setZValue(1);
-    scene->addItem(player);
+    setPlayer();
     connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
 
     playingField = new PlayingField(this->width(), this->height(), player);
     scene->addItem(playingField);
     playingField->startMovingAndSpawningObjects();
+}
+
+void Game::setPlayer()
+{
+    player = new Player(this->width(), this->height());
+
+    int speed = this->width() / 80;
+    int size = this->width() / 27;
+    int x = this->width() / 2 - size / 2;
+    int y = this->height()- size - 10;
+    QColor color(0, 30, 100);
+
+    player->setPlayerCharacter(speed, size, x, y, color);
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+    player->setZValue(1);
+    scene->addItem(player);
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

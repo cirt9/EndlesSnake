@@ -26,6 +26,7 @@ private slots:
 
 public:
     Obstacle(int obstacleWidth, int obstacleHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer, QGraphicsItem * parent = nullptr);
+    Obstacle() {}
 };
 
 #endif // OBSTACLE_H

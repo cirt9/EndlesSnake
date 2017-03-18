@@ -40,3 +40,16 @@ void Food::handleCollisionWithPlayer()
         }
     }
 }
+
+bool Food::collidesWithObstacle()
+{
+    QList<QGraphicsItem *> collidesWith = collidingItems();
+
+    for(auto collidingItem : collidesWith)
+    {
+        if(typeid(*collidingItem) == typeid(Obstacle))
+            return true;
+    }
+
+    return false;
+}

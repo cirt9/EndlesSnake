@@ -12,6 +12,13 @@ PlayingField::PlayingField(int screenW, int screenH, Player * playerAddress, QGr
     moveTimer = nullptr;
     spawnAndScoreTimer = nullptr;
 
+    if(screenWidth >= 1024)
+        numberOfmsUntilMoveTimeout = 5;
+    else
+        numberOfmsUntilMoveTimeout = 8;
+
+    spawningGap = screenHeight/3;
+
     setMainField(screenW, screenHeight, QColor(56, 122, 54));
     setWalls(screenW, screenHeight, QColor(0, 70, 0));
 }
@@ -54,34 +61,60 @@ void PlayingField::startMovingAndSpawningObjects()
 
 void PlayingField::spawner()
 {
-    int pointsToSpawnMustToCatchFood = 200;
+    int pointsToSpawnFood = 40;
+    int pointsToReduceGap = 35;
+    int pointsToIncreaseSpeed = 200;
+    int maxNumberOfObstacles = 3;
+    int obstaclesInSpawningRange = getNumberOfObstaclesInSpawningRange();
 
-    if(player->getScore() % pointsToSpawnMustToCatchFood == 0)
-        spawnMustToCatchFood();
+    if(obstaclesInSpawningRange < maxNumberOfObstacles)
+        spawnObstacle();
 
-    //spawn obstacles but player must have possibility to avoid obstacles
+    else if(player->getScore() % pointsToSpawnFood == 0)
+        spawnFood();
 
-    //spawn bonus food but not colliding with obstacles
+    if(player->getScore() % pointsToReduceGap == 0)
+        decreaseSpawningGap();
+
+    if(player->getScore() % pointsToIncreaseSpeed == 0)
+        decreaseNumberOfmsUntilMoveTimeout();
 }
 
-void PlayingField::spawnMustToCatchFood()
+int PlayingField::getNumberOfObstaclesInSpawningRange()
 {
-    spawnFood();
+    int obstaclesInSpawningRange = 0;
+    QList<QGraphicsItem *> objectsOnBoard = mainField->collidingItems();
 
-    int obstacleWidth = mainField->rect().width()/2 - player->getPlayerCharacter()->getSnakeWidth();
-    int obstacleHeight = 50;
-    int obstacleSpeed = 1;
+    for(auto object : objectsOnBoard)
+    {
+        if(typeid(*object) == typeid(Obstacle))
+        {
+            Obstacle * obstacle = dynamic_cast<Obstacle *>(object);
+            if(obstacle->y() < player->getPlayerCharacter()->getSnakeLength() + spawningGap)
+                obstaclesInSpawningRange++;
+        }
+    }
+    return obstaclesInSpawningRange;
+}
 
-    Obstacle * leftObstacle = new Obstacle(obstacleWidth, obstacleHeight, obstacleSpeed, screenWidth, screenHeight, QColor(153, 0, 0), moveTimer, this);
-    Obstacle * rightObstacle = new Obstacle(obstacleWidth, obstacleHeight, obstacleSpeed, screenWidth, screenHeight, QColor(153, 0, 0), moveTimer, this);
+void PlayingField::decreaseSpawningGap()
+{
+    if(spawningGap > screenWidth/5)
+        spawningGap -= screenWidth/70;
+}
 
-    leftObstacle->setPos(mainField->x(), 0);
-    rightObstacle->setPos(mainField->x() + mainField->rect().width() - obstacleWidth, 0);
+void PlayingField::decreaseNumberOfmsUntilMoveTimeout()
+{
+    if(numberOfmsUntilMoveTimeout > 3)
+    {
+        numberOfmsUntilMoveTimeout -= 1;
+        moveTimer->setInterval(numberOfmsUntilMoveTimeout);
+    }
 }
 
 void PlayingField::spawnFood()
 {
-    int foodSize = 30;
+    int foodSize = screenHeight / 37;
     int foodSpeed = 1;
     Food * newFood = new Food(foodSize, foodSize, foodSpeed, screenWidth, screenHeight, QColor(255, 255, 0), moveTimer, this);
 
@@ -90,16 +123,28 @@ void PlayingField::spawnFood()
 
 void PlayingField::setPositionOfFood(Food * food)
 {
-    int positionX = mainField->x() + mainField->rect().width() / 2 - food->rect().width()/2;
-    int positionY = 0;
+    int xRange = mainField->rect().width() - food->rect().width();
+    int positionX = mainField->x() + rand() % xRange;
+    int positionY = 0 - food->rect().height();
 
     food->setPos(positionX, positionY);
+
+    if(food->collidesWithObstacle())
+        delete food;
 }
 
 void PlayingField::spawnObstacle()
 {
-    int obstacleWidth = 100;
-    int obstacleHeight = 30;
+    int rangeLimiter = screenHeight / 3;
+    int numberOfSpawnedObstacles = 3;
+
+    int widthRange = (mainField->rect().width() - rangeLimiter) / numberOfSpawnedObstacles;
+    int heightRange = screenHeight / 16;
+    int minimunWidth = screenHeight / 20;
+    int minimumHeight = screenHeight / 37;
+
+    int obstacleWidth = rand() % widthRange + minimunWidth;
+    int obstacleHeight = rand() % heightRange + minimumHeight;
     int obstacleSpeed = 1;
     Obstacle * newObstacle = new Obstacle(obstacleWidth, obstacleHeight, obstacleSpeed, screenWidth, screenHeight, QColor(153, 0, 0), moveTimer, this);
 
@@ -110,7 +155,7 @@ void PlayingField::setRandomPositionToObstacle(Obstacle *obstacle)
 {
     int randomRange = mainField->rect().width() - obstacle->rect().width();
     int positionX = mainField->x() + rand() % randomRange;
-    int positionY = 0;
+    int positionY = 0 - obstacle->rect().height();
 
     obstacle->setPos(positionX, positionY);
 }

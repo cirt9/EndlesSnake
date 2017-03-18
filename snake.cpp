@@ -5,6 +5,7 @@ Snake::Snake(int movementSpeed, int snakeSize, int x, int y, QColor snakeColor, 
     speed = movementSpeed;
     snakeLength = snakeSize;
     snakeWidth = snakeSize;
+    lengthGrowth =  snakeWidth / 2;
 
     setRect(0, 0, snakeWidth, snakeLength);
     setPos(x, y);

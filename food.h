@@ -8,6 +8,7 @@
 #include <QList>
 #include <typeinfo>
 #include <snake.h>
+#include <obstacle.h>
 
 class Food : public QObject, public QGraphicsRectItem
 {
@@ -25,6 +26,9 @@ private slots:
 
 public:
     Food(int foodWidth, int foodHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer, QGraphicsItem * parent = nullptr);
+    ~Food() {}
+
+    bool collidesWithObstacle();
 };
 
 #endif // FOOD_H

@@ -10,6 +10,8 @@
 #include <obstacle.h>
 #include <QTimer>
 #include <QTime>
+#include <QList>
+#include <typeinfo>
 
 class PlayingField : public QObject, public QGraphicsRectItem
 {
@@ -24,9 +26,10 @@ private:
     QTimer * moveTimer;
     QTimer * spawnAndScoreTimer;
 
-    const int pointsPerTimeout = 5;
+    const int pointsPerTimeout = 1;
     const int numberOfmsUntilSpawnTimeout = 100;
-    const int numberOfmsUntilMoveTimeout = 3;
+    double spawningGap;
+    int numberOfmsUntilMoveTimeout;
 
     int screenWidth;
     int screenHeight;
@@ -34,11 +37,16 @@ private:
     void setMainField(int width, int height, QColor color);
     void setWalls(int width, int height, QColor wallColor);
 
-    void spawnMustToCatchFood();
     void spawnFood();
     void setPositionOfFood(Food * food);
 
+    void spawnObstacle();
     void setRandomPositionToObstacle(Obstacle * obstacle);
+
+    int getNumberOfObstaclesInSpawningRange();
+
+    void decreaseSpawningGap();
+    void decreaseNumberOfmsUntilMoveTimeout();
 
 private slots:
     void spawner();
@@ -47,7 +55,6 @@ public:
     PlayingField(int screenW, int screenH, Player * playerAddress, QGraphicsItem * parent = nullptr);
     ~PlayingField() {}
 
-    void spawnObstacle();
     void startMovingAndSpawningObjects();
 
 };
