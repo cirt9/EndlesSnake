@@ -57,6 +57,8 @@ public:
 
     void startMovingAndSpawningObjects();
 
+    void pause();
+    void resume();
 };
 
 #endif // PLAYINGFIELD_H

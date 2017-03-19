@@ -32,6 +32,9 @@ void Player::keyPressEvent(QKeyEvent *event)
 
     else if(event->key() == Qt::Key_Escape)
         emit escapeClicked();
+
+    else if(event->key() == Qt::Key_P)
+        emit pauseClicked();
 }
 
 Snake * Player::getPlayerCharacter() const

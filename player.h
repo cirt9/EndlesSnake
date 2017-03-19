@@ -32,6 +32,7 @@ public slots:
 
 signals:
     void escapeClicked();
+    void pauseClicked();
 };
 
 #endif // PLAYER_H

@@ -6,6 +6,7 @@ Snake::Snake(int movementSpeed, int snakeSize, int x, int y, QColor snakeColor, 
     snakeLength = snakeSize;
     snakeWidth = snakeSize;
     lengthGrowth =  snakeWidth / 2;
+    movingAllowed = true;
 
     setRect(0, 0, snakeWidth, snakeLength);
     setPos(x, y);
@@ -16,16 +17,19 @@ Snake::Snake(int movementSpeed, int snakeSize, int x, int y, QColor snakeColor, 
 
 void Snake::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+    if(movingAllowed)
     {
-        setPos(x()-speed, y());
-        handleCollisionWithWallWhenMovingLeft();
-    }
+        if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left)
+        {
+            setPos(x()-speed, y());
+            handleCollisionWithWallWhenMovingLeft();
+        }
 
-    else if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
-    {
-        setPos(x()+speed, y());
-        handleCollisionWithWallWhenMovingRight();
+        else if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right)
+        {
+            setPos(x()+speed, y());
+            handleCollisionWithWallWhenMovingRight();
+        }
     }
 }
 
@@ -83,4 +87,10 @@ int Snake::getSnakeWidth() const
     return snakeWidth;
 }
 
-
+void Snake::changeMovingAllowed()
+{
+    if(movingAllowed)
+        movingAllowed = false;
+    else
+        movingAllowed = true;
+}

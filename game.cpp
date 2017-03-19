@@ -14,6 +14,8 @@ Game::Game(int width, int height, QWidget * /*parent*/)
     qsrand(QTime::currentTime().msec());
 
     initScene(0, 0, width, height);
+
+    gamePaused = false;
 }
 
 void Game::initScene(int x, int y, int width, int height)
@@ -74,6 +76,7 @@ void Game::startGame()
 
     setPlayer();
     connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
+    connect(player, SIGNAL(pauseClicked()), this, SLOT(pauseOrResumeGame()));
 
     playingField = new PlayingField(this->width(), this->height(), player);
     scene->addItem(playingField);
@@ -95,6 +98,28 @@ void Game::setPlayer()
     player->setFocus();
     player->setZValue(1);
     scene->addItem(player);
+}
+
+void Game::pauseOrResumeGame()
+{
+    if(gamePaused)
+        resumeGame();
+    else
+        pauseGame();
+}
+
+void Game::pauseGame()
+{
+    playingField->pause();
+    player->getPlayerCharacter()->changeMovingAllowed();
+    gamePaused = true;
+}
+
+void Game::resumeGame()
+{
+    playingField->resume();
+    player->getPlayerCharacter()->changeMovingAllowed();
+    gamePaused = false;
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

@@ -9,8 +9,8 @@ PlayingField::PlayingField(int screenW, int screenH, Player * playerAddress, QGr
     screenWidth = screenW;
     screenHeight  = screenH;
 
-    moveTimer = nullptr;
-    spawnAndScoreTimer = nullptr;
+    moveTimer = new QTimer(this);
+    spawnAndScoreTimer = new QTimer(this);
 
     if(screenWidth >= 1024)
         numberOfmsUntilMoveTimeout = 5;
@@ -49,10 +49,7 @@ void PlayingField::setWalls(int width, int height, QColor wallColor)
 
 void PlayingField::startMovingAndSpawningObjects()
 {
-    moveTimer = new QTimer(this);
     moveTimer->start(numberOfmsUntilMoveTimeout);
-
-    spawnAndScoreTimer = new QTimer(this);
     spawnAndScoreTimer->start(numberOfmsUntilSpawnTimeout);
 
     connect(spawnAndScoreTimer, &QTimer::timeout, this, [this]{player->increaseScore(pointsPerTimeout);} );
@@ -158,4 +155,16 @@ void PlayingField::setRandomPositionToObstacle(Obstacle *obstacle)
     int positionY = 0 - obstacle->rect().height();
 
     obstacle->setPos(positionX, positionY);
+}
+
+void PlayingField::pause()
+{
+    moveTimer->stop();
+    spawnAndScoreTimer->stop();
+}
+
+void PlayingField::resume()
+{
+    moveTimer->start();
+    spawnAndScoreTimer->start();
 }
