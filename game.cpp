@@ -87,8 +87,8 @@ void Game::setPlayer()
 {
     player = new Player(this->width(), this->height());
 
-    int speed = this->width() / 80;
-    int size = this->width() / 27;
+    int speed = this->height() / 41;
+    int size = this->height() / 15;
     int x = this->width() / 2 - size / 2;
     int y = this->height()- size - 10;
     QColor color(0, 30, 100);

@@ -12,20 +12,17 @@ PlayingField::PlayingField(int screenW, int screenH, Player * playerAddress, QGr
     moveTimer = new QTimer(this);
     spawnAndScoreTimer = new QTimer(this);
 
-    if(screenWidth >= 1024)
-        numberOfmsUntilMoveTimeout = 5;
-    else
-        numberOfmsUntilMoveTimeout = 8;
-
-    spawningGap = screenHeight/3;
+    numberOfmsUntilMoveTimeout = 5;
 
     setMainField(screenW, screenHeight, QColor(56, 122, 54));
     setWalls(screenW, screenHeight, QColor(0, 70, 0));
+
+    spawningGap = mainField->rect().height() / 3;
 }
 
 void PlayingField::setMainField(int width, int height, QColor color)
 {
-    int mainFieldWidth = width/3;
+    int mainFieldWidth = 650;
     int mainFieldHeight = height;
     int mainFieldPositionX = width/2 - mainFieldWidth/2;
     int mainFieldPositionY = 0;
@@ -40,7 +37,7 @@ void PlayingField::setMainField(int width, int height, QColor color)
 
 void PlayingField::setWalls(int width, int height, QColor wallColor)
 {
-    int wallWidth = width / 3;
+    int wallWidth = (width - mainField->rect().width()) / 2;
     int rightWallX = width - wallWidth;
 
     leftWall = new Wall(0, 0, wallWidth, height, wallColor, this);
@@ -96,8 +93,8 @@ int PlayingField::getNumberOfObstaclesInSpawningRange()
 
 void PlayingField::decreaseSpawningGap()
 {
-    if(spawningGap > screenWidth/5)
-        spawningGap -= screenWidth/70;
+    if(spawningGap > mainField->rect().width() / 2)
+        spawningGap -= mainField->rect().width() / 21;
 }
 
 void PlayingField::decreaseNumberOfmsUntilMoveTimeout()
@@ -111,7 +108,7 @@ void PlayingField::decreaseNumberOfmsUntilMoveTimeout()
 
 void PlayingField::spawnFood()
 {
-    int foodSize = screenHeight / 37;
+    int foodSize = mainField->rect().height() / 37;
     int foodSpeed = 1;
     Food * newFood = new Food(foodSize, foodSize, foodSpeed, screenWidth, screenHeight, QColor(255, 255, 0), moveTimer, this);
 
@@ -132,13 +129,13 @@ void PlayingField::setPositionOfFood(Food * food)
 
 void PlayingField::spawnObstacle()
 {
-    int rangeLimiter = screenHeight / 3;
+    int rangeLimiter = mainField->rect().height() / 3;
     int numberOfSpawnedObstacles = 3;
 
     int widthRange = (mainField->rect().width() - rangeLimiter) / numberOfSpawnedObstacles;
-    int heightRange = screenHeight / 16;
-    int minimunWidth = screenHeight / 20;
-    int minimumHeight = screenHeight / 37;
+    int heightRange = mainField->rect().height() / 16;
+    int minimunWidth = mainField->rect().height() / 20;
+    int minimumHeight = mainField->rect().height() / 37;
 
     int obstacleWidth = rand() % widthRange + minimunWidth;
     int obstacleHeight = rand() % heightRange + minimumHeight;
