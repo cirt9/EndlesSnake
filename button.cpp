@@ -3,6 +3,7 @@
 Button::Button(QString textOnButton, int width, int height, int fontSize, QGraphicsItem * parent) : QGraphicsRectItem(parent)
 {
     setRect(0,0,width,height);
+    setZValue(1);
 
     buttonColor.setStyle(Qt::SolidPattern);
     buttonColor.setColor("dark blue");

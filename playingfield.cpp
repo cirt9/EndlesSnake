@@ -17,7 +17,7 @@ PlayingField::PlayingField(int screenW, int screenH, Player * playerAddress, QGr
     setMainField(screenW, screenHeight, QColor(56, 122, 54));
     setWalls(screenW, screenHeight, QColor(0, 70, 0));
 
-    spawningGap = mainField->rect().height() / 3;
+    spawningGap = mainField->rect().width() / 1.9;
 }
 
 void PlayingField::setMainField(int width, int height, QColor color)
@@ -108,7 +108,7 @@ void PlayingField::decreaseNumberOfmsUntilMoveTimeout()
 
 void PlayingField::spawnFood()
 {
-    int foodSize = mainField->rect().height() / 37;
+    int foodSize = mainField->rect().width() / 21;
     int foodSpeed = 1;
     Food * newFood = new Food(foodSize, foodSize, foodSpeed, screenWidth, screenHeight, QColor(255, 255, 0), moveTimer, this);
 
