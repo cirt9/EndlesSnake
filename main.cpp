@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     QPointer<Game> game(new Game(screenWidth, screenHeight));
     game->show();
-    game->displayMainMenu();
+    game->displayInformationWindow();
 
     return a.exec();
 }

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/info">
+        <file>initial_info.txt</file>
+    </qresource>
+</RCC>

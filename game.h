@@ -11,6 +11,10 @@
 #include <player.h>
 #include <snake.h>
 #include <QTime>
+#include <QPen>
+#include <QFile>
+#include <QTextStream>
+#include <QUrl>
 
 class Game : public QGraphicsView
 {
@@ -48,6 +52,7 @@ private slots:
 
 public slots:
     void displayMainMenu();
+    void displayInformationWindow();
 
 };
 #endif // GAME_H

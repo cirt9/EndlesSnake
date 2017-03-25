@@ -30,6 +30,30 @@ void Game::initScene(int x, int y, int width, int height)
     setScene(scene);
 }
 
+void Game::displayInformationWindow()
+{
+    Button * goToMenuButton = new Button(QString(""), this->width(), this->height(), 0);
+    goToMenuButton->setButtonColor(QColor(174, 204, 118));
+    goToMenuButton->setHoverButtonColor(QColor(174, 204, 118));
+    goToMenuButton->setPen(Qt::NoPen);
+    connect(goToMenuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+    scene->addItem(goToMenuButton);
+
+    QFile file(":/info/initial_info.txt");
+    file.open(QIODevice::ReadOnly);
+
+    QTextStream fileText(&file);
+    QGraphicsTextItem * infoText = new QGraphicsTextItem(fileText.readAll());
+    file.close();
+
+    QFont infoFont("times new roman", this->height() / 40);
+    infoText->setFont(infoFont);
+    infoText->setDefaultTextColor(QColor(107, 142, 35));
+    infoText->setPos(this->width()/2 - infoText->boundingRect().width()/2, this->height()/2.5 - infoText->boundingRect().height()/2);
+    infoText->setZValue(1);
+    scene->addItem(infoText);
+}
+
 void Game::displayMainMenu()
 {
     scene->clear();

@@ -32,3 +32,6 @@ HEADERS  += game.h \
     obstacle.h
 
 FORMS    +=
+
+RESOURCES += \
+    resources.qrc
