@@ -1,4 +1,5 @@
 #include "game.h"
+#include <QDebug>
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
@@ -105,7 +106,7 @@ void Game::startGame()
     changingPauseStatusAllowed = true;
 
     setPlayer();
-    connect(player, SIGNAL(escapeClicked()), this, SLOT(close())); //temporary
+    connect(player, SIGNAL(escapeClicked()), this, SLOT(displayEscapeWindow()));
     connect(player, SIGNAL(pauseClicked()), this, SLOT(pauseOrResumeGame()));
     connect(player->getPlayerCharacter(), SIGNAL(defeated()), this, SLOT(displayGameOverWindow()));
 
@@ -140,6 +141,40 @@ void Game::pauseOrResumeGame()
         else
             pauseGame();
     }
+}
+
+void Game::displayEscapeWindow()
+{
+    pauseGame();
+    changingPauseStatusAllowed = false;
+
+    QGraphicsTextItem * whatToDo = new QGraphicsTextItem(QString("What do you want to do?"));
+    QFont whatToDoFont("times new roman", this->width()/40);
+    whatToDo->setFont(whatToDoFont);
+    whatToDo->setDefaultTextColor(QColor(0, 50, 0));
+    whatToDo->setPos(this->width()/2 - whatToDo->boundingRect().width()/2, this->height()/2 - whatToDo->boundingRect().height()/2 - this->height() / 6);
+    scene->addItem(whatToDo);
+
+    int buttonWidth = this->width() / 5;
+    int buttonHeight = this->height() / 15;
+    int buttonX = this->width() / 2 - buttonWidth / 2;
+    int buttonY = this->height() / 2 - buttonHeight / 2;
+
+    Button * resumeButton = new Button(QString("Resume"), buttonWidth, buttonHeight, buttonHeight/2);
+    resumeButton->setPos(buttonX , buttonY - this->height() / 15);
+    resumeButton->setButtonColor(QColor(67, 139, 60));
+    resumeButton->setHoverButtonColor(QColor(92, 165, 94));
+    resumeButton->setFontColor(QColor(0, 50, 0));
+    connect(resumeButton, SIGNAL(clicked()), this, SLOT(clearAndResume()));
+    scene->addItem(resumeButton);
+
+    Button * mainMenuButton = new Button(QString("Main menu"), buttonWidth, buttonHeight, buttonHeight/2);
+    mainMenuButton->setPos(buttonX , buttonY + this->height() / 30);
+    mainMenuButton->setButtonColor(QColor(67, 139, 60));
+    mainMenuButton->setHoverButtonColor(QColor(92, 165, 94));
+    mainMenuButton->setFontColor(QColor(0, 50, 0));
+    connect(mainMenuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+    scene->addItem(mainMenuButton);
 }
 
 void Game::displayGameOverWindow()
@@ -198,6 +233,24 @@ void Game::resumeGame()
     playingField->resume();
     player->getPlayerCharacter()->changeMovingAllowed();
     gamePaused = false;
+}
+
+void Game::clearAndResume()
+{
+    changingPauseStatusAllowed = true;
+    getRidOfButtonsAndText();
+    resumeGame();
+}
+
+void Game::getRidOfButtonsAndText()
+{
+    QList<QGraphicsItem *> sceneItems = scene->items();
+
+    for(auto item : sceneItems)
+    {
+        if(typeid(*item) == typeid(Button) || typeid(*item) == typeid(QGraphicsTextItem))
+            delete item;
+    }
 }
 
 void Game::makeSceneRectSmallerToPreventScrollingEffect()

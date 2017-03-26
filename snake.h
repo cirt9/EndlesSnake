@@ -35,6 +35,7 @@ public:
 
     void keyPressEvent(QKeyEvent * event = nullptr);
 
+    bool getMovingAllowed() const;
     void changeMovingAllowed();
 
 signals:

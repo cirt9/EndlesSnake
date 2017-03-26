@@ -37,6 +37,7 @@ private:
 
     void pauseGame();
     void resumeGame();
+    void getRidOfButtonsAndText();
 
     void makeSceneRectSmallerToPreventScrollingEffect();
     void restoreAppropriateSceneRectSize();
@@ -46,12 +47,14 @@ public:
     ~Game() {}
 
 private slots:
+    void displayMainMenu();
     void startGame();
     void pauseOrResumeGame();
+    void displayEscapeWindow();
     void displayGameOverWindow();
+    void clearAndResume();
 
 public slots:
-    void displayMainMenu();
     void displayInformationWindow();
 
 };

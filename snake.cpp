@@ -87,6 +87,12 @@ int Snake::getSnakeWidth() const
     return snakeWidth;
 }
 
+bool Snake::getMovingAllowed() const
+{
+    return movingAllowed;
+}
+
+
 void Snake::changeMovingAllowed()
 {
     if(movingAllowed)

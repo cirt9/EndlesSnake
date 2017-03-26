@@ -30,7 +30,7 @@ void Player::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left || event->key() == Qt::Key_Right || event->key() == Qt::Key_D)
         playerCharacter->keyPressEvent(event);
 
-    else if(event->key() == Qt::Key_Escape)
+    else if(event->key() == Qt::Key_Escape && playerCharacter->getMovingAllowed())
         emit escapeClicked();
 
     else if(event->key() == Qt::Key_P)
