@@ -12,9 +12,9 @@
 #include <snake.h>
 #include <QTime>
 #include <QPen>
-#include <QFile>
 #include <QTextStream>
-#include <QUrl>
+#include <QLineEdit>
+
 
 class Game : public QGraphicsView
 {
@@ -33,7 +33,7 @@ private:
 
     void initScene(int x, int y, int width, int height);
     void drawPanel(int x, int y, int width, int height, QColor color, double opacity = 1.0);
-    void setPlayer();
+    void setPlayer(QString playerName);
 
     void pauseGame();
     void resumeGame();
@@ -48,7 +48,8 @@ public:
 
 private slots:
     void displayMainMenu();
-    void startGame();
+    void displayUsernameGettingScreen();
+    void startGame(QString playerName = QString("\0") );
     void pauseOrResumeGame();
     void displayEscapeWindow();
     void displayGameOverWindow();

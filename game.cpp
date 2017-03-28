@@ -1,5 +1,4 @@
 #include "game.h"
-#include <QDebug>
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
@@ -72,7 +71,7 @@ void Game::displayMainMenu()
     playButton->setButtonColor(QColor(67, 139, 60));
     playButton->setHoverButtonColor(QColor(92, 165, 94));
     playButton->setFontColor(QColor(0, 50, 0));
-    connect(playButton, SIGNAL(clicked()), this, SLOT(startGame()));
+    connect(playButton, SIGNAL(clicked()), this, SLOT(displayUsernameGettingScreen()));
     scene->addItem(playButton);
 
     Button * scoresButton = new Button(QString("Scores"), this->width()/5, this->height()/18, this->width()/50);
@@ -99,13 +98,55 @@ void Game::displayMainMenu()
     scene->addItem(author);
 }
 
-void Game::startGame()
+void Game::displayUsernameGettingScreen()
+{
+    scene->clear();
+
+    QGraphicsTextItem * typeInText = new QGraphicsTextItem(QString("Type in your nickname"));
+    QFont typeInTextFont("times new roman", this->width()/30);
+    typeInText->setFont(typeInTextFont);
+    typeInText->setDefaultTextColor(QColor(0, 50, 0));
+    typeInText->setPos(this->width()/2 - typeInText->boundingRect().width()/2, this->height()/2 - typeInText->boundingRect().height()/2 - this->height() / 5);
+    scene->addItem(typeInText);
+
+    QLineEdit * nicknameLine = new QLineEdit();
+    int lineWidth = this->width() / 3;
+    int lineHeight = this->height() / 15;
+    nicknameLine->setGeometry(this->width()/2 - lineWidth/2, this->height()/2 - lineHeight/2, lineWidth, lineHeight);
+    nicknameLine->setMaxLength(20);
+    nicknameLine->setPlaceholderText(QString("Your Nickname"));
+
+    QFont nicknameLineFont("times new roman", this->width()/50);
+    nicknameLine->setFont(nicknameLineFont);
+    scene->addWidget(nicknameLine);
+
+    int buttonWidth = this->width() / 5;
+    int buttonHeight = this->height() / 15;
+
+    Button * backButton = new Button(QString("Back"), buttonWidth, buttonHeight, buttonHeight/2);
+    backButton->setPos(this->width()/2 - buttonWidth-1, this->height()/2 + this->height()/6);
+    backButton->setButtonColor(QColor(67, 139, 60));
+    backButton->setHoverButtonColor(QColor(92, 165, 94));
+    backButton->setFontColor(QColor(0, 50, 0));
+    connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+    scene->addItem(backButton);
+
+    Button * startButton = new Button(QString("I'm ready!"), buttonWidth, buttonHeight, buttonHeight/2);
+    startButton->setPos(this->width()/2+1, this->height()/2 + this->height()/6);
+    startButton->setButtonColor(QColor(67, 139, 60));
+    startButton->setHoverButtonColor(QColor(92, 165, 94));
+    startButton->setFontColor(QColor(0, 50, 0));
+    connect(startButton, &Button::clicked, this, [=]{startGame(nicknameLine->text()); } );
+    scene->addItem(startButton);
+}
+
+void Game::startGame(QString playerName)
 {
     scene->clear();
     restoreAppropriateSceneRectSize();
     changingPauseStatusAllowed = true;
 
-    setPlayer();
+    setPlayer(playerName);
     connect(player, SIGNAL(escapeClicked()), this, SLOT(displayEscapeWindow()));
     connect(player, SIGNAL(pauseClicked()), this, SLOT(pauseOrResumeGame()));
     connect(player->getPlayerCharacter(), SIGNAL(defeated()), this, SLOT(displayGameOverWindow()));
@@ -115,7 +156,7 @@ void Game::startGame()
     playingField->startMovingAndSpawningObjects();
 }
 
-void Game::setPlayer()
+void Game::setPlayer(QString playerName)
 {
     player = new Player(this->width(), this->height());
 
@@ -126,6 +167,7 @@ void Game::setPlayer()
     QColor color(0, 30, 100);
 
     player->setPlayerCharacter(speed, size, x, y, color);
+    player->setPlayerName(playerName);
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     player->setZValue(1);
@@ -209,7 +251,8 @@ void Game::displayGameOverWindow()
     playAgainButton->setButtonColor(QColor(67, 139, 60));
     playAgainButton->setHoverButtonColor(QColor(92, 165, 94));
     playAgainButton->setFontColor(QColor(0, 50, 0));
-    connect(playAgainButton, SIGNAL(clicked()), this, SLOT(startGame()));
+    connect(playAgainButton, &Button::clicked, this, [=]{startGame(player->getPlayerName()); } );
+    //connect(playAgainButton, SIGNAL(clicked()), this, SLOT(startGame()));
     scene->addItem(playAgainButton);
 
     Button * mainMenuButton = new Button(QString("Back to main menu"), buttonWidth, buttonHeight, windowWidth / 30);

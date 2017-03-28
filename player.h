@@ -23,6 +23,7 @@ public:
 
     void setPlayerCharacter(int movementSpeed, int characterSize, int x, int y,  QColor characterColor);
     void setPlayerName(QString name);
+    QString getPlayerName();
 
     Snake * getPlayerCharacter() const;
     int getScore() const;

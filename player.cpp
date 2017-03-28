@@ -20,6 +20,11 @@ void Player::setPlayerName(QString name)
     playerName = name;
 }
 
+QString Player::getPlayerName()
+{
+    return playerName;
+}
+
 void Player::increaseScore(int increase)
 {
     score += increase;
