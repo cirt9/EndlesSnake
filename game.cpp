@@ -1,4 +1,5 @@
 #include "game.h"
+#include <QDebug>
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
@@ -19,6 +20,10 @@ Game::Game(int width, int height, QWidget * /*parent*/)
     screenHeight = height;
     gamePaused = false;
     changingPauseStatusAllowed = true;
+
+    QDir dir(QDir::currentPath() + "/scrs");
+    if(!dir.exists())
+        dir.mkpath(".");
 }
 
 void Game::initScene(int x, int y, int width, int height)
@@ -32,6 +37,8 @@ void Game::initScene(int x, int y, int width, int height)
 
 void Game::displayInformationWindow()
 {
+    makeSceneRectSmallerToPreventScrollingEffect();
+
     Button * goToMenuButton = new Button(QString(""), this->width(), this->height(), 0);
     goToMenuButton->setButtonColor(QColor(174, 204, 118));
     goToMenuButton->setHoverButtonColor(QColor(174, 204, 118));
@@ -40,24 +47,25 @@ void Game::displayInformationWindow()
     scene->addItem(goToMenuButton);
 
     QFile file(":/info/initial_info.txt");
-    file.open(QIODevice::ReadOnly);
 
-    QTextStream fileText(&file);
-    QGraphicsTextItem * infoText = new QGraphicsTextItem(fileText.readAll());
-    file.close();
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QTextStream fileText(&file);
+        QGraphicsTextItem * infoText = new QGraphicsTextItem(fileText.readAll());
+        file.close();
 
-    QFont infoFont("times new roman", this->height() / 40);
-    infoText->setFont(infoFont);
-    infoText->setDefaultTextColor(QColor(107, 142, 35));
-    infoText->setPos(this->width()/2 - infoText->boundingRect().width()/2, this->height()/2.5 - infoText->boundingRect().height()/2);
-    infoText->setZValue(1);
-    scene->addItem(infoText);
+        QFont infoFont("times new roman", this->height() / 40);
+        infoText->setFont(infoFont);
+        infoText->setDefaultTextColor(QColor(107, 142, 35));
+        infoText->setPos(this->width()/2 - infoText->boundingRect().width()/2, this->height()/2.5 - infoText->boundingRect().height()/2);
+        infoText->setZValue(1);
+        scene->addItem(infoText);
+    }
 }
 
 void Game::displayMainMenu()
 {
     scene->clear();
-    makeSceneRectSmallerToPreventScrollingEffect();
 
     QGraphicsTextItem * title = new QGraphicsTextItem(QString("EndlesSnake"));
     QFont titleFont("times new roman", this->width()/15);
@@ -79,7 +87,7 @@ void Game::displayMainMenu()
     scoresButton->setButtonColor(QColor(67, 139, 60));
     scoresButton->setHoverButtonColor(QColor(92, 165, 94));
     scoresButton->setFontColor(QColor(0, 50, 0));
-    //connect(scoresButton, SIGNAL(), this, SLOT());
+    connect(scoresButton, SIGNAL(clicked()), this, SLOT(displayHallOfFame()));
     scene->addItem(scoresButton);
 
     Button * quitButton = new Button(QString("Quit Game"), this->width()/5, this->height()/18, this->width()/50);
@@ -91,11 +99,50 @@ void Game::displayMainMenu()
     scene->addItem(quitButton);
 
     QGraphicsTextItem * author = new QGraphicsTextItem(QString("Author: Bartłomiej Wójtowicz"));
-    QFont authorFont("calibri", 15);
+    QFont authorFont("calibri", this->height() / 50);
     author->setFont(authorFont);
     author->setDefaultTextColor(QColor(107,142,35));
     author->setPos(this->width() - author->boundingRect().width(), this->height() - author->boundingRect().height());
     scene->addItem(author);
+}
+
+void Game::displayHallOfFame()
+{
+    scene->clear();
+
+    QGraphicsTextItem * title = new QGraphicsTextItem(QString("Hall of fame"));
+    QFont titleFont("times new roman", this->height() / 15);
+    title->setFont(titleFont);
+    title->setDefaultTextColor(QColor(107,142,35));
+    title->setPos(this->width()/2 - title->boundingRect().width()/2, this->height()/20);
+    scene->addItem(title);
+
+    int textX = this->width()/3;
+    int textY = this->height()/4;
+    int textGap = this->height() / 20;
+    int textSize = this->height() / 25;
+
+    QList< QPair<QString, int> > bestScores = readBestScoresFromFile();
+    for(int i=0; i<bestScores.size(); i++)
+    {
+        QGraphicsTextItem * score = new QGraphicsTextItem(QString::number(i+1) + QString(". ") + bestScores[i].first + QString(" ") + QString::number(bestScores[i].second));
+        QFont scoreFont("times new roman", textSize);
+        score->setFont(scoreFont);
+        score->setDefaultTextColor(QColor(107,142,35));
+        score->setPos(textX, textY + textGap * i);
+        scene->addItem(score);
+    }
+
+    int buttonWidth = this->width() / 4;
+    int buttonHeight = this->height() / 15;
+
+    Button * backButton = new Button(QString("Back"), buttonWidth, buttonHeight, buttonHeight/2);
+    backButton->setPos(this->width()/2 - buttonWidth/2 , this->height() - this->height()/10);
+    backButton->setButtonColor(QColor(67, 139, 60));
+    backButton->setHoverButtonColor(QColor(92, 165, 94));
+    backButton->setFontColor(QColor(0, 50, 0));
+    connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+    scene->addItem(backButton);
 }
 
 void Game::displayUsernameGettingScreen()
@@ -221,6 +268,7 @@ void Game::displayEscapeWindow()
 
 void Game::displayGameOverWindow()
 {
+    updateBestScores();
     pauseGame();
     changingPauseStatusAllowed = false;
     drawPanel(0, 0, this->width(), this->height(), QColor("black"), 0.9);
@@ -304,6 +352,89 @@ void Game::makeSceneRectSmallerToPreventScrollingEffect()
 void Game::restoreAppropriateSceneRectSize()
 {
     setSceneRect(0, 0, screenWidth + 5, screenHeight + 5);
+}
+
+void Game::updateBestScores()
+{
+    QList< QPair<QString, int> > bestScores = readBestScoresFromFile();
+
+    if(bestScores.size() < 10)
+        bestScores.push_back(QPair<QString, int>(player->getPlayerName(), player->getScore()) );
+    else
+    {
+        for(int i=0; i<bestScores.size(); i++)
+        {
+            if(player->getScore() > bestScores[i].second)
+            {
+                bestScores.insert(i, QPair<QString, int>(player->getPlayerName(), player->getScore()) );
+                break;
+            }
+        }
+        bestScores.removeLast();
+    }
+
+    selectionSortForVectorOfPairs(bestScores);
+    writeBestScoresToFile(bestScores);
+}
+
+QList<QPair<QString, int> > Game::readBestScoresFromFile() const
+{
+    QFile inputFile("scrs/scores.dat");
+    QList< QPair<QString, int> > bestScores;
+
+    if(inputFile.open(QIODevice::ReadOnly))
+    {
+       QDataStream scores(&inputFile);
+
+       while(!scores.atEnd())
+       {
+          QString name;
+          int score;
+          scores >> name >> score;
+          bestScores.push_front( QPair<QString, int>(name, score) );
+       }
+       inputFile.close();
+    }
+    return bestScores;
+}
+
+void Game::writeBestScoresToFile( QList<QPair<QString, int> > & vector) const
+{
+    QFile inputFile("scrs/scores.dat");
+    if(inputFile.open(QIODevice::WriteOnly))
+    {
+       QDataStream scores(&inputFile);
+       QPair<QString, int> score;
+
+       foreach(score, vector)
+           scores << score.first << score.second;
+
+       inputFile.close();
+    }
+}
+
+void Game::selectionSortForVectorOfPairs(QList<QPair<QString, int> > & vector)
+{
+    for(int i=0; i<vector.length(); i++)
+        qDebug() << vector[i].first << " " << vector[i].second;
+    qDebug() << endl;
+
+    for(int i=0; i<vector.size(); i++)
+    {
+        int min = i;
+
+        for(int j=i+1; j<vector.size(); j++)
+        {
+            if(vector[j].second < vector[min].second)
+                min = j;
+        }
+        QPair<QString, int> helpingVar = vector[i];
+        vector[i] = vector[min];
+        vector[min] = helpingVar;
+    }
+
+    for(int i=0; i<vector.length(); i++)
+        qDebug() << vector[i].first << " " << vector[i].second;
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

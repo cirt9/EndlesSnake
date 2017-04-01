@@ -14,6 +14,9 @@
 #include <QPen>
 #include <QTextStream>
 #include <QLineEdit>
+#include <QPair>
+#include <QDir>
+#include <QList>
 
 
 class Game : public QGraphicsView
@@ -42,6 +45,11 @@ private:
     void makeSceneRectSmallerToPreventScrollingEffect();
     void restoreAppropriateSceneRectSize();
 
+    void updateBestScores();
+    QList< QPair<QString, int> > readBestScoresFromFile() const;
+    void writeBestScoresToFile(QList< QPair<QString, int> > & vector) const;
+    void selectionSortForVectorOfPairs(QList< QPair<QString, int> > & vector);
+
 public:
     Game(int width = 1024, int height = 768, QWidget * /*parent*/ = nullptr);
     ~Game() {}
@@ -54,6 +62,7 @@ private slots:
     void displayEscapeWindow();
     void displayGameOverWindow();
     void clearAndResume();
+    void displayHallOfFame();
 
 public slots:
     void displayInformationWindow();
