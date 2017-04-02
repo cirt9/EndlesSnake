@@ -1,5 +1,4 @@
 #include "game.h"
-#include <QDebug>
 
 Game::Game(int width, int height, QWidget * /*parent*/)
 {
@@ -74,29 +73,20 @@ void Game::displayMainMenu()
     title->setPos(this->width()/2 - title->boundingRect().width()/2, this->height()/16);
     scene->addItem(title);
 
-    Button * playButton = new Button(QString("Play"), this->width()/5, this->height()/18, this->width()/50);
-    playButton->setPos(this->width() / 2 - playButton->boundingRect().width()/2 , this->height()/3);
-    playButton->setButtonColor(QColor(67, 139, 60));
-    playButton->setHoverButtonColor(QColor(92, 165, 94));
-    playButton->setFontColor(QColor(0, 50, 0));
+    int buttonWidth =  this->width() / 5;
+    int buttonHeight = this->height() / 18;
+    int buttonFontSize = this->width() / 50;
+    int buttonX = this->width() / 2 - buttonWidth / 2;
+    int buttonY = this->height() / 3;
+
+    Button * playButton = makeDefaultButton(buttonX, buttonY, buttonWidth, buttonHeight, QString("Play"), buttonFontSize);
     connect(playButton, SIGNAL(clicked()), this, SLOT(displayUsernameGettingScreen()));
-    scene->addItem(playButton);
 
-    Button * scoresButton = new Button(QString("Scores"), this->width()/5, this->height()/18, this->width()/50);
-    scoresButton->setPos(this->width() / 2 - scoresButton->boundingRect().width()/2 , this->height()/3 + this->height()/10);
-    scoresButton->setButtonColor(QColor(67, 139, 60));
-    scoresButton->setHoverButtonColor(QColor(92, 165, 94));
-    scoresButton->setFontColor(QColor(0, 50, 0));
+    Button * scoresButton = makeDefaultButton(buttonX, buttonY + this->height()/10, buttonWidth, buttonHeight, QString("Hall of fame"), buttonFontSize);
     connect(scoresButton, SIGNAL(clicked()), this, SLOT(displayHallOfFame()));
-    scene->addItem(scoresButton);
 
-    Button * quitButton = new Button(QString("Quit Game"), this->width()/5, this->height()/18, this->width()/50);
-    quitButton->setPos(this->width() / 2 - quitButton->boundingRect().width()/2 , this->height()/3 + this->height()/10 * 2);
-    quitButton->setButtonColor(QColor(67, 139, 60));
-    quitButton->setHoverButtonColor(QColor(92, 165, 94));
-    quitButton->setFontColor(QColor(0, 50, 0));
+    Button * quitButton = makeDefaultButton(buttonX, buttonY + this->height()/10 * 2, buttonWidth, buttonHeight, QString("Quit Game"), buttonFontSize);
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
-    scene->addItem(quitButton);
 
     QGraphicsTextItem * author = new QGraphicsTextItem(QString("Author: Bartłomiej Wójtowicz"));
     QFont authorFont("calibri", this->height() / 50);
@@ -117,7 +107,7 @@ void Game::displayHallOfFame()
     title->setPos(this->width()/2 - title->boundingRect().width()/2, this->height()/20);
     scene->addItem(title);
 
-    int textX = this->width()/3;
+    int textX = this->width()/6;
     int textY = this->height()/4;
     int textGap = this->height() / 20;
     int textSize = this->height() / 25;
@@ -125,24 +115,39 @@ void Game::displayHallOfFame()
     QList< QPair<QString, int> > bestScores = readBestScoresFromFile();
     for(int i=0; i<bestScores.size(); i++)
     {
-        QGraphicsTextItem * score = new QGraphicsTextItem(QString::number(i+1) + QString(". ") + bestScores[i].first + QString(" ") + QString::number(bestScores[i].second));
-        QFont scoreFont("times new roman", textSize);
-        score->setFont(scoreFont);
+        QFont font("times new roman", textSize);
+
+        QGraphicsTextItem * placeAndName = new QGraphicsTextItem(QString::number(i+1) + QString(". ") + bestScores[i].first);
+        placeAndName->setFont(font);
+        placeAndName->setDefaultTextColor(QColor(107,142,35));
+        placeAndName->setPos(textX, textY + textGap * i);
+        scene->addItem(placeAndName);
+
+        QGraphicsTextItem * score = new QGraphicsTextItem(QString::number(bestScores[i].second));
+        score->setFont(font);
         score->setDefaultTextColor(QColor(107,142,35));
-        score->setPos(textX, textY + textGap * i);
+        score->setPos(this->width() - this->width()/5, textY + textGap * i);
         scene->addItem(score);
     }
 
+    for(int i=bestScores.size(); i<10; i++)
+    {
+        QFont font("times new roman", textSize);
+
+        QGraphicsTextItem * place = new QGraphicsTextItem(QString::number(i+1) + QString(". "));
+        place->setFont(font);
+        place->setDefaultTextColor(QColor(107,142,35));
+        place->setPos(textX, textY + textGap * i);
+        scene->addItem(place);
+    }
     int buttonWidth = this->width() / 4;
     int buttonHeight = this->height() / 15;
+    int buttonX = this->width()/2 - buttonWidth/2;
+    int buttonY = this->height() - this->height()/10;
+    int buttonTextSize = buttonHeight/2;
 
-    Button * backButton = new Button(QString("Back"), buttonWidth, buttonHeight, buttonHeight/2);
-    backButton->setPos(this->width()/2 - buttonWidth/2 , this->height() - this->height()/10);
-    backButton->setButtonColor(QColor(67, 139, 60));
-    backButton->setHoverButtonColor(QColor(92, 165, 94));
-    backButton->setFontColor(QColor(0, 50, 0));
+    Button * backButton = makeDefaultButton(buttonX, buttonY, buttonWidth, buttonHeight, QString("Back"), buttonTextSize);
     connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-    scene->addItem(backButton);
 }
 
 void Game::displayUsernameGettingScreen()
@@ -160,7 +165,7 @@ void Game::displayUsernameGettingScreen()
     int lineWidth = this->width() / 3;
     int lineHeight = this->height() / 15;
     nicknameLine->setGeometry(this->width()/2 - lineWidth/2, this->height()/2 - lineHeight/2, lineWidth, lineHeight);
-    nicknameLine->setMaxLength(20);
+    nicknameLine->setMaxLength(15);
     nicknameLine->setPlaceholderText(QString("Your Nickname"));
 
     QFont nicknameLineFont("times new roman", this->width()/50);
@@ -169,22 +174,15 @@ void Game::displayUsernameGettingScreen()
 
     int buttonWidth = this->width() / 5;
     int buttonHeight = this->height() / 15;
+    int buttonX = this->width()/2;
+    int buttonY = this->height()/2 + this->height()/6;
+    int buttonTextSize = buttonHeight/2;
 
-    Button * backButton = new Button(QString("Back"), buttonWidth, buttonHeight, buttonHeight/2);
-    backButton->setPos(this->width()/2 - buttonWidth-1, this->height()/2 + this->height()/6);
-    backButton->setButtonColor(QColor(67, 139, 60));
-    backButton->setHoverButtonColor(QColor(92, 165, 94));
-    backButton->setFontColor(QColor(0, 50, 0));
+    Button * backButton = makeDefaultButton(buttonX - buttonWidth -1, buttonY, buttonWidth, buttonHeight, QString("Back"), buttonTextSize);
     connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-    scene->addItem(backButton);
 
-    Button * startButton = new Button(QString("I'm ready!"), buttonWidth, buttonHeight, buttonHeight/2);
-    startButton->setPos(this->width()/2+1, this->height()/2 + this->height()/6);
-    startButton->setButtonColor(QColor(67, 139, 60));
-    startButton->setHoverButtonColor(QColor(92, 165, 94));
-    startButton->setFontColor(QColor(0, 50, 0));
+    Button * startButton = makeDefaultButton(buttonX+1, buttonY, buttonWidth, buttonHeight, QString("I'm ready!"), buttonTextSize);
     connect(startButton, &Button::clicked, this, [=]{startGame(nicknameLine->text()); } );
-    scene->addItem(startButton);
 }
 
 void Game::startGame(QString playerName)
@@ -248,22 +246,13 @@ void Game::displayEscapeWindow()
     int buttonHeight = this->height() / 15;
     int buttonX = this->width() / 2 - buttonWidth / 2;
     int buttonY = this->height() / 2 - buttonHeight / 2;
+    int buttonTextSize = buttonHeight/2;
 
-    Button * resumeButton = new Button(QString("Resume"), buttonWidth, buttonHeight, buttonHeight/2);
-    resumeButton->setPos(buttonX , buttonY - this->height() / 15);
-    resumeButton->setButtonColor(QColor(67, 139, 60));
-    resumeButton->setHoverButtonColor(QColor(92, 165, 94));
-    resumeButton->setFontColor(QColor(0, 50, 0));
+    Button * resumeButton = makeDefaultButton(buttonX, buttonY - this->height() / 15, buttonWidth, buttonHeight, QString("Resume"), buttonTextSize);
     connect(resumeButton, SIGNAL(clicked()), this, SLOT(clearAndResume()));
-    scene->addItem(resumeButton);
 
-    Button * mainMenuButton = new Button(QString("Main menu"), buttonWidth, buttonHeight, buttonHeight/2);
-    mainMenuButton->setPos(buttonX , buttonY + this->height() / 30);
-    mainMenuButton->setButtonColor(QColor(67, 139, 60));
-    mainMenuButton->setHoverButtonColor(QColor(92, 165, 94));
-    mainMenuButton->setFontColor(QColor(0, 50, 0));
+    Button * mainMenuButton = makeDefaultButton(buttonX, buttonY + this->height() / 30, buttonWidth, buttonHeight, QString("Main menu"), buttonTextSize);
     connect(mainMenuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-    scene->addItem(mainMenuButton);
 }
 
 void Game::displayGameOverWindow()
@@ -293,23 +282,13 @@ void Game::displayGameOverWindow()
     int buttonHeight = windowHeight / 8;
     int buttonMiddleX = this->width() / 2 - buttonWidth / 2;
     int buttonMiddleY = windowY + windowY / 1.5;
+    int buttonTextSize = windowWidth / 30;
 
-    Button * playAgainButton = new Button(QString("Just one more time!"), buttonWidth, buttonHeight, windowWidth / 30);
-    playAgainButton->setPos(buttonMiddleX , buttonMiddleY);
-    playAgainButton->setButtonColor(QColor(67, 139, 60));
-    playAgainButton->setHoverButtonColor(QColor(92, 165, 94));
-    playAgainButton->setFontColor(QColor(0, 50, 0));
+    Button * playAgainButton = makeDefaultButton(buttonMiddleX, buttonMiddleY, buttonWidth, buttonHeight, QString("Just one more time!"), buttonTextSize);
     connect(playAgainButton, &Button::clicked, this, [=]{startGame(player->getPlayerName()); } );
-    //connect(playAgainButton, SIGNAL(clicked()), this, SLOT(startGame()));
-    scene->addItem(playAgainButton);
 
-    Button * mainMenuButton = new Button(QString("Back to main menu"), buttonWidth, buttonHeight, windowWidth / 30);
-    mainMenuButton->setPos(buttonMiddleX , buttonMiddleY + windowHeight / 5);
-    mainMenuButton->setButtonColor(QColor(67, 139, 60));
-    mainMenuButton->setHoverButtonColor(QColor(92, 165, 94));
-    mainMenuButton->setFontColor(QColor(0, 50, 0));
+    Button * mainMenuButton = makeDefaultButton(buttonMiddleX, buttonMiddleY + windowHeight/5, buttonWidth, buttonHeight, QString("Back to main menu"), buttonTextSize);
     connect(mainMenuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-    scene->addItem(mainMenuButton);
 }
 
 void Game::pauseGame()
@@ -415,10 +394,6 @@ void Game::writeBestScoresToFile( QList<QPair<QString, int> > & vector) const
 
 void Game::selectionSortForVectorOfPairs(QList<QPair<QString, int> > & vector)
 {
-    for(int i=0; i<vector.length(); i++)
-        qDebug() << vector[i].first << " " << vector[i].second;
-    qDebug() << endl;
-
     for(int i=0; i<vector.size(); i++)
     {
         int min = i;
@@ -432,9 +407,17 @@ void Game::selectionSortForVectorOfPairs(QList<QPair<QString, int> > & vector)
         vector[i] = vector[min];
         vector[min] = helpingVar;
     }
+}
 
-    for(int i=0; i<vector.length(); i++)
-        qDebug() << vector[i].first << " " << vector[i].second;
+Button * Game::makeDefaultButton(int x, int y, int width, int height, QString text, int fontSize)
+{
+    Button * button = new Button(text, width, height, fontSize);
+    button->setPos(x, y);
+    button->setButtonColor(QColor(67, 139, 60));
+    button->setHoverButtonColor(QColor(92, 165, 94));
+    button->setFontColor(QColor(0, 50, 0));
+    scene->addItem(button);
+    return button;
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)

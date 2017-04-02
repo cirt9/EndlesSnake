@@ -50,6 +50,8 @@ private:
     void writeBestScoresToFile(QList< QPair<QString, int> > & vector) const;
     void selectionSortForVectorOfPairs(QList< QPair<QString, int> > & vector);
 
+    Button * makeDefaultButton(int x, int y, int width, int height, QString text, int fontSize);
+
 public:
     Game(int width = 1024, int height = 768, QWidget * /*parent*/ = nullptr);
     ~Game() {}
