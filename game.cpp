@@ -352,7 +352,7 @@ void Game::updateBestScores()
         bestScores.removeLast();
     }
 
-    selectionSortForVectorOfPairs(bestScores);
+    selectionSortForListOfPairs(bestScores);
     writeBestScoresToFile(bestScores);
 }
 
@@ -377,7 +377,7 @@ QList<QPair<QString, int> > Game::readBestScoresFromFile() const
     return bestScores;
 }
 
-void Game::writeBestScoresToFile( QList<QPair<QString, int> > & vector) const
+void Game::writeBestScoresToFile( QList<QPair<QString, int> > & list) const
 {
     QFile inputFile("scrs/scores.dat");
     if(inputFile.open(QIODevice::WriteOnly))
@@ -385,27 +385,27 @@ void Game::writeBestScoresToFile( QList<QPair<QString, int> > & vector) const
        QDataStream scores(&inputFile);
        QPair<QString, int> score;
 
-       foreach(score, vector)
+       foreach(score, list)
            scores << score.first << score.second;
 
        inputFile.close();
     }
 }
 
-void Game::selectionSortForVectorOfPairs(QList<QPair<QString, int> > & vector)
+void Game::selectionSortForListOfPairs(QList<QPair<QString, int> > & list)
 {
-    for(int i=0; i<vector.size(); i++)
+    for(int i=0; i<list.size(); i++)
     {
         int min = i;
 
-        for(int j=i+1; j<vector.size(); j++)
+        for(int j=i+1; j<list.size(); j++)
         {
-            if(vector[j].second < vector[min].second)
+            if(list[j].second < list[min].second)
                 min = j;
         }
-        QPair<QString, int> helpingVar = vector[i];
-        vector[i] = vector[min];
-        vector[min] = helpingVar;
+        QPair<QString, int> helpingVar = list[i];
+        list[i] = list[min];
+        list[min] = helpingVar;
     }
 }
 

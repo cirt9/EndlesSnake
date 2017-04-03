@@ -47,8 +47,8 @@ private:
 
     void updateBestScores();
     QList< QPair<QString, int> > readBestScoresFromFile() const;
-    void writeBestScoresToFile(QList< QPair<QString, int> > & vector) const;
-    void selectionSortForVectorOfPairs(QList< QPair<QString, int> > & vector);
+    void writeBestScoresToFile(QList< QPair<QString, int> > & list) const;
+    void selectionSortForListOfPairs(QList< QPair<QString, int> > & list);
 
     Button * makeDefaultButton(int x, int y, int width, int height, QString text, int fontSize);
 
