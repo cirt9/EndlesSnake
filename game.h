@@ -51,6 +51,7 @@ private:
     void selectionSortForListOfPairs(QList< QPair<QString, int> > & list);
 
     Button * makeDefaultButton(int x, int y, int width, int height, QString text, int fontSize);
+    QGraphicsTextItem * makeDefaultText(QString text, int fontSize, QColor color);
 
 public:
     Game(int width = 1024, int height = 768, QWidget * /*parent*/ = nullptr);

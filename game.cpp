@@ -50,12 +50,9 @@ void Game::displayInformationWindow()
     if(file.open(QIODevice::ReadOnly))
     {
         QTextStream fileText(&file);
-        QGraphicsTextItem * infoText = new QGraphicsTextItem(fileText.readAll());
+        QGraphicsTextItem * infoText = makeDefaultText(fileText.readAll(), this->height() / 40, QColor(107, 142, 35));
         file.close();
 
-        QFont infoFont("times new roman", this->height() / 40);
-        infoText->setFont(infoFont);
-        infoText->setDefaultTextColor(QColor(107, 142, 35));
         infoText->setPos(this->width()/2 - infoText->boundingRect().width()/2, this->height()/2.5 - infoText->boundingRect().height()/2);
         infoText->setZValue(1);
         scene->addItem(infoText);
@@ -66,10 +63,7 @@ void Game::displayMainMenu()
 {
     scene->clear();
 
-    QGraphicsTextItem * title = new QGraphicsTextItem(QString("EndlesSnake"));
-    QFont titleFont("times new roman", this->width()/15);
-    title->setFont(titleFont);
-    title->setDefaultTextColor(QColor(107, 142, 35));
+    QGraphicsTextItem * title = makeDefaultText(QString("EndlesSnake"), this->width()/15, QColor(107, 142, 35));
     title->setPos(this->width()/2 - title->boundingRect().width()/2, this->height()/16);
     scene->addItem(title);
 
@@ -88,10 +82,7 @@ void Game::displayMainMenu()
     Button * quitButton = makeDefaultButton(buttonX, buttonY + this->height()/10 * 2, buttonWidth, buttonHeight, QString("Quit Game"), buttonFontSize);
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    QGraphicsTextItem * author = new QGraphicsTextItem(QString("Author: Bartłomiej Wójtowicz"));
-    QFont authorFont("calibri", this->height() / 50);
-    author->setFont(authorFont);
-    author->setDefaultTextColor(QColor(107,142,35));
+    QGraphicsTextItem * author = makeDefaultText(QString("Author: Bartłomiej Wójtowicz"), this->height()/50, QColor(107, 142, 35));
     author->setPos(this->width() - author->boundingRect().width(), this->height() - author->boundingRect().height());
     scene->addItem(author);
 }
@@ -100,10 +91,7 @@ void Game::displayHallOfFame()
 {
     scene->clear();
 
-    QGraphicsTextItem * title = new QGraphicsTextItem(QString("Hall of fame"));
-    QFont titleFont("times new roman", this->height() / 15);
-    title->setFont(titleFont);
-    title->setDefaultTextColor(QColor(107,142,35));
+    QGraphicsTextItem * title = makeDefaultText(QString("Hall of fame"), this->height()/15, QColor(107, 142, 35));
     title->setPos(this->width()/2 - title->boundingRect().width()/2, this->height()/20);
     scene->addItem(title);
 
@@ -115,31 +103,22 @@ void Game::displayHallOfFame()
     QList< QPair<QString, int> > bestScores = readBestScoresFromFile();
     for(int i=0; i<bestScores.size(); i++)
     {
-        QFont font("times new roman", textSize);
-
-        QGraphicsTextItem * placeAndName = new QGraphicsTextItem(QString::number(i+1) + QString(". ") + bestScores[i].first);
-        placeAndName->setFont(font);
-        placeAndName->setDefaultTextColor(QColor(107,142,35));
+        QGraphicsTextItem * placeAndName = makeDefaultText(QString::number(i+1) + QString(". ") + bestScores[i].first, textSize, QColor(107,142,35));
         placeAndName->setPos(textX, textY + textGap * i);
         scene->addItem(placeAndName);
 
-        QGraphicsTextItem * score = new QGraphicsTextItem(QString::number(bestScores[i].second));
-        score->setFont(font);
-        score->setDefaultTextColor(QColor(107,142,35));
+        QGraphicsTextItem * score = makeDefaultText(QString::number(bestScores[i].second), textSize, QColor(107,142,35));
         score->setPos(this->width() - this->width()/5, textY + textGap * i);
         scene->addItem(score);
     }
 
     for(int i=bestScores.size(); i<10; i++)
     {
-        QFont font("times new roman", textSize);
-
-        QGraphicsTextItem * place = new QGraphicsTextItem(QString::number(i+1) + QString(". "));
-        place->setFont(font);
-        place->setDefaultTextColor(QColor(107,142,35));
+        QGraphicsTextItem * place = makeDefaultText(QString::number(i+1) + QString(". "), textSize,QColor(107,142,35));
         place->setPos(textX, textY + textGap * i);
         scene->addItem(place);
     }
+
     int buttonWidth = this->width() / 4;
     int buttonHeight = this->height() / 15;
     int buttonX = this->width()/2 - buttonWidth/2;
@@ -154,10 +133,7 @@ void Game::displayUsernameGettingScreen()
 {
     scene->clear();
 
-    QGraphicsTextItem * typeInText = new QGraphicsTextItem(QString("Type in your nickname"));
-    QFont typeInTextFont("times new roman", this->width()/30);
-    typeInText->setFont(typeInTextFont);
-    typeInText->setDefaultTextColor(QColor(0, 50, 0));
+    QGraphicsTextItem * typeInText = makeDefaultText(QString("Type in your nickname"), this->width()/30, QColor(107,142,35));
     typeInText->setPos(this->width()/2 - typeInText->boundingRect().width()/2, this->height()/2 - typeInText->boundingRect().height()/2 - this->height() / 5);
     scene->addItem(typeInText);
 
@@ -166,7 +142,7 @@ void Game::displayUsernameGettingScreen()
     int lineHeight = this->height() / 15;
     nicknameLine->setGeometry(this->width()/2 - lineWidth/2, this->height()/2 - lineHeight/2, lineWidth, lineHeight);
     nicknameLine->setMaxLength(15);
-    nicknameLine->setPlaceholderText(QString("Your Nickname"));
+    nicknameLine->setPlaceholderText(QString("Nickname"));
 
     QFont nicknameLineFont("times new roman", this->width()/50);
     nicknameLine->setFont(nicknameLineFont);
@@ -235,10 +211,7 @@ void Game::displayEscapeWindow()
     pauseGame();
     changingPauseStatusAllowed = false;
 
-    QGraphicsTextItem * whatToDo = new QGraphicsTextItem(QString("What do you want to do?"));
-    QFont whatToDoFont("times new roman", this->width()/40);
-    whatToDo->setFont(whatToDoFont);
-    whatToDo->setDefaultTextColor(QColor(0, 50, 0));
+    QGraphicsTextItem * whatToDo = makeDefaultText(QString("What do you want to do?"), this->width()/40, QColor(107,142,35));
     whatToDo->setPos(this->width()/2 - whatToDo->boundingRect().width()/2, this->height()/2 - whatToDo->boundingRect().height()/2 - this->height() / 6);
     scene->addItem(whatToDo);
 
@@ -269,11 +242,8 @@ void Game::displayGameOverWindow()
     drawPanel(windowX, windowY, windowWidth, windowHeight, QColor("green"), 0.7);
 
     int scoreTextFontSize = windowWidth / 20;
-    QGraphicsTextItem * scoreText = new QGraphicsTextItem(QString("Your score: ") + QString::number(player->getScore() ) );
-    int scoreTextX = (windowWidth + windowX) / 2 + scoreText->boundingRect().width() / 2;
-    QFont scoreFont("times new roman", scoreTextFontSize);
-    scoreText->setFont(scoreFont);
-    scoreText->setDefaultTextColor(QColor("black"));
+    QGraphicsTextItem * scoreText = makeDefaultText(QString("Your score: ") + QString::number(player->getScore()), scoreTextFontSize, QColor(107,142,35) );
+    int scoreTextX = windowX + windowWidth/2 - scoreText->boundingRect().width() / 2;
     scoreText->setPos(scoreTextX , windowY);
     scoreText->setZValue(1);
     scene->addItem(scoreText);
@@ -346,10 +316,10 @@ void Game::updateBestScores()
             if(player->getScore() > bestScores[i].second)
             {
                 bestScores.insert(i, QPair<QString, int>(player->getPlayerName(), player->getScore()) );
+                bestScores.removeLast();
                 break;
             }
         }
-        bestScores.removeLast();
     }
 
     selectionSortForListOfPairs(bestScores);
@@ -383,10 +353,9 @@ void Game::writeBestScoresToFile( QList<QPair<QString, int> > & list) const
     if(inputFile.open(QIODevice::WriteOnly))
     {
        QDataStream scores(&inputFile);
-       QPair<QString, int> score;
 
-       foreach(score, list)
-           scores << score.first << score.second;
+       for(int i=0; i<list.size(); i++)
+           scores << list[i].first << list[i].second;
 
        inputFile.close();
     }
@@ -418,6 +387,17 @@ Button * Game::makeDefaultButton(int x, int y, int width, int height, QString te
     button->setFontColor(QColor(0, 50, 0));
     scene->addItem(button);
     return button;
+}
+
+QGraphicsTextItem * Game::makeDefaultText(QString text, int fontSize, QColor color)
+{
+    QGraphicsTextItem * defaultText = new QGraphicsTextItem(text);
+
+    QFont defaultTextFont("times new roman", fontSize);
+    defaultText->setFont(defaultTextFont);
+    defaultText->setDefaultTextColor(color);
+
+    return defaultText;
 }
 
 void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
