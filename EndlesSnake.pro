@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     playingfield.cpp \
     player.cpp \
     food.cpp \
-    obstacle.cpp
+    obstacle.cpp \
+    backgroundpanel.cpp
 
 HEADERS  += game.h \
     button.h \
@@ -29,7 +30,8 @@ HEADERS  += game.h \
     playingfield.h \
     player.h \
     food.h \
-    obstacle.h
+    obstacle.h \
+    backgroundpanel.h
 
 FORMS    +=
 

@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game(int width, int height, QWidget * /*parent*/)
+Game::Game(int width, int height, QWidget * parent) : QGraphicsView(parent)
 {
     horizontalScrollBar()->setEnabled(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -210,6 +210,14 @@ void Game::displayEscapeWindow()
 {
     pauseGame();
     changingPauseStatusAllowed = false;
+    dimTheScreen(0.95);
+
+    int windowWidth = this->width()/2;
+    int windowHeight = this->height()/2;
+    int windowX = this->width()/2 - windowWidth/2;
+    int windowY = this->height()/2 - windowHeight/2;
+    BackgroundPanel * window = new BackgroundPanel(windowX, windowY, windowWidth, windowHeight, QColor("green"), 0.4);
+    scene->addItem(window);
 
     QGraphicsTextItem * whatToDo = makeDefaultText(QString("What do you want to do?"), this->width()/40, QColor(107,142,35));
     whatToDo->setPos(this->width()/2 - whatToDo->boundingRect().width()/2, this->height()/2 - whatToDo->boundingRect().height()/2 - this->height() / 6);
@@ -233,13 +241,14 @@ void Game::displayGameOverWindow()
     updateBestScores();
     pauseGame();
     changingPauseStatusAllowed = false;
-    drawPanel(0, 0, this->width(), this->height(), QColor("black"), 0.9);
+    dimTheScreen(0.95);
 
     int windowWidth = this->width() / 2;
     int windowHeight = this->height() / 2;
     int windowX = this->width()/2 - windowWidth/2;
     int windowY = this->height()/2 - windowHeight/2;
-    drawPanel(windowX, windowY, windowWidth, windowHeight, QColor("green"), 0.7);
+    BackgroundPanel * scoreBackground = new BackgroundPanel(windowX, windowY, windowWidth, windowHeight, QColor("green"), 0.4);
+    scene->addItem(scoreBackground);
 
     int scoreTextFontSize = windowWidth / 20;
     QGraphicsTextItem * scoreText = makeDefaultText(QString("Your score: ") + QString::number(player->getScore()), scoreTextFontSize, QColor(107,142,35) );
@@ -288,7 +297,7 @@ void Game::getRidOfButtonsAndText()
 
     for(auto item : sceneItems)
     {
-        if(typeid(*item) == typeid(Button) || typeid(*item) == typeid(QGraphicsTextItem))
+        if(typeid(*item) == typeid(Button) || typeid(*item) == typeid(QGraphicsTextItem) || typeid(*item) == typeid(BackgroundPanel))
             delete item;
     }
 }
@@ -400,12 +409,8 @@ QGraphicsTextItem * Game::makeDefaultText(QString text, int fontSize, QColor col
     return defaultText;
 }
 
-void Game::drawPanel(int x, int y, int width, int height, QColor color, double opacity)
+void Game::dimTheScreen(double opacity)
 {
-    QGraphicsRectItem * panel = new QGraphicsRectItem(x, y, width, height);
-    QBrush panelColor(color, Qt::SolidPattern);
-    panel->setBrush(panelColor);
-    panel->setOpacity(opacity);
-    panel->setZValue(1);
-    scene->addItem(panel);
+    BackgroundPanel * shadedScreen = new BackgroundPanel(0, 0, this->width(), this->height(), QColor("black"), opacity);
+    scene->addItem(shadedScreen);
 }

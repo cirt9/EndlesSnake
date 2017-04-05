@@ -17,7 +17,7 @@
 #include <QPair>
 #include <QDir>
 #include <QList>
-
+#include <backgroundpanel.h>
 
 class Game : public QGraphicsView
 {
@@ -35,7 +35,6 @@ private:
     bool changingPauseStatusAllowed;
 
     void initScene(int x, int y, int width, int height);
-    void drawPanel(int x, int y, int width, int height, QColor color, double opacity = 1.0);
     void setPlayer(QString playerName);
 
     void pauseGame();
@@ -52,9 +51,10 @@ private:
 
     Button * makeDefaultButton(int x, int y, int width, int height, QString text, int fontSize);
     QGraphicsTextItem * makeDefaultText(QString text, int fontSize, QColor color);
+    void dimTheScreen(double opacity);
 
 public:
-    Game(int width = 1024, int height = 768, QWidget * /*parent*/ = nullptr);
+    Game(int width = 1024, int height = 768, QWidget * parent = nullptr);
     ~Game() {}
 
 private slots:
