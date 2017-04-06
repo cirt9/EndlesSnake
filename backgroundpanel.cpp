@@ -9,4 +9,5 @@ BackgroundPanel::BackgroundPanel(int x, int y, int width, int height, QColor col
 
     setOpacity(opacity);
     setPos(x, y);
+    setZValue(1);
 }

@@ -19,6 +19,7 @@ private:
     int speed;
     int snakeLength;
     int snakeWidth;
+    int numberOfGrows;
     bool movingAllowed;
 
     void handleCollisionWithWallWhenMovingLeft();
@@ -32,6 +33,7 @@ public:
 
     int getSnakeLength() const;
     int getSnakeWidth() const;
+    int getNumberOfGrows() const;
 
     void keyPressEvent(QKeyEvent * event = nullptr);
 

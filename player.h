@@ -17,6 +17,9 @@ private:
 
     void keyPressEvent(QKeyEvent * event = nullptr);
 
+private slots:
+    void calculateFinalScore();
+
 public:
     Player(int screenWidth, int screenHeight, QGraphicsItem * parent = nullptr);
     ~Player() {}

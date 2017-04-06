@@ -56,7 +56,7 @@ void PlayingField::startMovingAndSpawningObjects()
 void PlayingField::spawner()
 {
     int pointsToSpawnFood = 40;
-    int pointsToReduceGap = 35;
+    int pointsToReduceGap = 75;
     int pointsToIncreaseSpeed = 200;
     int maxNumberOfObstacles = 3;
     int obstaclesInSpawningRange = getNumberOfObstaclesInSpawningRange();
@@ -93,13 +93,19 @@ int PlayingField::getNumberOfObstaclesInSpawningRange()
 
 void PlayingField::decreaseSpawningGap()
 {
-    if(spawningGap > mainField->rect().width() / 2)
+    if(spawningGap > mainField->rect().width() / 1.5)
         spawningGap -= mainField->rect().width() / 21;
 }
 
 void PlayingField::decreaseNumberOfmsUntilMoveTimeout()
 {
     if(numberOfmsUntilMoveTimeout > 3)
+    {
+        numberOfmsUntilMoveTimeout -= 1;
+        moveTimer->setInterval(numberOfmsUntilMoveTimeout);
+    }
+
+    else if(player->getScore() % 800 == 0)
     {
         numberOfmsUntilMoveTimeout -= 1;
         moveTimer->setInterval(numberOfmsUntilMoveTimeout);

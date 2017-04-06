@@ -6,6 +6,7 @@ Snake::Snake(int movementSpeed, int snakeSize, int x, int y, QColor snakeColor, 
     snakeLength = snakeSize;
     snakeWidth = snakeSize;
     lengthGrowth =  snakeWidth / 2;
+    numberOfGrows = 0;
     movingAllowed = true;
 
     setRect(0, 0, snakeWidth, snakeLength);
@@ -71,6 +72,7 @@ void Snake::handleCollisionWithWallWhenMovingRight()
 
 void Snake::grow()
 {
+    numberOfGrows++;
     snakeLength += lengthGrowth;
 
     setRect(0, 0, snakeWidth, snakeLength);
@@ -85,6 +87,11 @@ int Snake::getSnakeLength() const
 int Snake::getSnakeWidth() const
 {
     return snakeWidth;
+}
+
+int Snake::getNumberOfGrows() const
+{
+    return numberOfGrows;
 }
 
 bool Snake::getMovingAllowed() const

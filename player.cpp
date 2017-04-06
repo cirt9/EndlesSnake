@@ -13,6 +13,7 @@ Player::Player(int screenWidth, int screenHeight, QGraphicsItem * parent) : QGra
 void Player::setPlayerCharacter(int movementSpeed, int characterSize, int x, int y, QColor characterColor)
 {
     playerCharacter = new Snake(movementSpeed, characterSize, x, y, characterColor, this);
+    connect(playerCharacter, SIGNAL(defeated()), this, SLOT(calculateFinalScore()) );
 }
 
 void Player::setPlayerName(QString name)
@@ -40,6 +41,12 @@ void Player::keyPressEvent(QKeyEvent *event)
 
     else if(event->key() == Qt::Key_P)
         emit pauseClicked();
+}
+
+void Player::calculateFinalScore()
+{
+    int scoreForOneGrow = 50;
+    score += playerCharacter->getNumberOfGrows() * scoreForOneGrow;
 }
 
 Snake * Player::getPlayerCharacter() const

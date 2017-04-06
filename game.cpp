@@ -221,6 +221,7 @@ void Game::displayEscapeWindow()
 
     QGraphicsTextItem * whatToDo = makeDefaultText(QString("What do you want to do?"), this->width()/40, QColor(107,142,35));
     whatToDo->setPos(this->width()/2 - whatToDo->boundingRect().width()/2, this->height()/2 - whatToDo->boundingRect().height()/2 - this->height() / 6);
+    whatToDo->setZValue(1);
     scene->addItem(whatToDo);
 
     int buttonWidth = this->width() / 5;
