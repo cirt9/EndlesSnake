@@ -1,6 +1,7 @@
 #include "backgroundpanel.h"
 
-BackgroundPanel::BackgroundPanel(int x, int y, int width, int height, QColor color, double opacity, QGraphicsItem * parent) : QGraphicsRectItem(parent)
+BackgroundPanel::BackgroundPanel(int x, int y, int width, int height, QColor color, double opacity, QGraphicsItem * parent)
+                                 : QGraphicsRectItem(parent)
 {
     setRect(0, 0, width, height);
 
