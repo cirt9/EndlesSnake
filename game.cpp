@@ -57,6 +57,11 @@ void Game::displayInformationWindow()
         infoText->setZValue(1);
         scene->addItem(infoText);
     }
+    else
+    {
+        QMessageBox::critical(this, QString("Error"), QString("This copy of EndlesSnake is corrupted."));
+        close();
+    }
 }
 
 void Game::displayMainMenu()
@@ -336,7 +341,7 @@ void Game::updateBestScores()
     writeBestScoresToFile(bestScores);
 }
 
-QList<QPair<QString, int> > Game::readBestScoresFromFile() const
+QList<QPair<QString, int> > Game::readBestScoresFromFile()
 {
     QFile inputFile("scrs/scores.dat");
     QList< QPair<QString, int> > bestScores;
@@ -350,14 +355,19 @@ QList<QPair<QString, int> > Game::readBestScoresFromFile() const
           QString name;
           int score;
           scores >> name >> score;
-          bestScores.push_front( QPair<QString, int>(name, score) );
+          bestScores.push_front( QPair<QString, int>(name, score));
        }
        inputFile.close();
+    }
+    else
+    {
+        QMessageBox::critical(this, QString("Error"), QString("This copy of EndlesSnake is corrupted."));
+        close();
     }
     return bestScores;
 }
 
-void Game::writeBestScoresToFile( QList<QPair<QString, int> > & list) const
+void Game::writeBestScoresToFile( QList<QPair<QString, int> > & list)
 {
     QFile inputFile("scrs/scores.dat");
     if(inputFile.open(QIODevice::WriteOnly))
@@ -368,6 +378,11 @@ void Game::writeBestScoresToFile( QList<QPair<QString, int> > & list) const
            scores << list[i].first << list[i].second;
 
        inputFile.close();
+    }
+    else
+    {
+        QMessageBox::critical(this, QString("Error"), QString("This copy of EndlesSnake is corrupted."));
+        close();
     }
 }
 

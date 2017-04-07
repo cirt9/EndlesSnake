@@ -18,6 +18,7 @@
 #include <QDir>
 #include <QList>
 #include <backgroundpanel.h>
+#include <QMessageBox>
 
 class Game : public QGraphicsView
 {
@@ -45,8 +46,8 @@ private:
     void restoreAppropriateSceneRectSize();
 
     void updateBestScores();
-    QList< QPair<QString, int> > readBestScoresFromFile() const;
-    void writeBestScoresToFile(QList< QPair<QString, int> > & list) const;
+    QList< QPair<QString, int> > readBestScoresFromFile();
+    void writeBestScoresToFile(QList< QPair<QString, int> > & list);
     void selectionSortForListOfPairs(QList< QPair<QString, int> > & list);
 
     Button * makeDefaultButton(int x, int y, int width, int height, QString text, int fontSize);
