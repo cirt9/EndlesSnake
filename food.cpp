@@ -1,6 +1,7 @@
 #include "food.h"
 
-Food::Food(int foodWidth, int foodHeight, int speed, int screenW, int screenH, QColor color,  QTimer * timer, QGraphicsItem * parent) : QGraphicsRectItem(parent)
+Food::Food(int foodWidth, int foodHeight, int speed, int screenW, int screenH, QColor color,  QTimer * timer, QGraphicsItem * parent)
+           : QGraphicsRectItem(parent)
 {
     moveSpeed = speed;
     screenWidth = screenW;
