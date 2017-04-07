@@ -146,7 +146,8 @@ void PlayingField::spawnObstacle()
     int obstacleWidth = rand() % widthRange + minimunWidth;
     int obstacleHeight = rand() % heightRange + minimumHeight;
     int obstacleSpeed = 1;
-    Obstacle * newObstacle = new Obstacle(obstacleWidth, obstacleHeight, obstacleSpeed, screenWidth, screenHeight, QColor(153, 0, 0), moveTimer, this);
+    Obstacle * newObstacle = new Obstacle(obstacleWidth, obstacleHeight, obstacleSpeed, screenWidth, screenHeight,
+                                          QColor(153, 0, 0), moveTimer, this);
 
     setRandomPositionToObstacle(newObstacle);
 }
