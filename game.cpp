@@ -81,10 +81,12 @@ void Game::displayMainMenu()
     Button * playButton = makeDefaultButton(buttonX, buttonY, buttonWidth, buttonHeight, QString("Play"), buttonFontSize);
     connect(playButton, SIGNAL(clicked()), this, SLOT(displayUsernameGettingScreen()));
 
-    Button * scoresButton = makeDefaultButton(buttonX, buttonY + this->height()/10, buttonWidth, buttonHeight, QString("Hall of fame"), buttonFontSize);
+    Button * scoresButton = makeDefaultButton(buttonX, buttonY + this->height()/10, buttonWidth, buttonHeight, QString("Hall of fame"),
+                                              buttonFontSize);
     connect(scoresButton, SIGNAL(clicked()), this, SLOT(displayHallOfFame()));
 
-    Button * quitButton = makeDefaultButton(buttonX, buttonY + this->height()/10 * 2, buttonWidth, buttonHeight, QString("Quit Game"), buttonFontSize);
+    Button * quitButton = makeDefaultButton(buttonX, buttonY + this->height()/10 * 2, buttonWidth, buttonHeight, QString("Quit Game"),
+                                            buttonFontSize);
     connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QGraphicsTextItem * author = makeDefaultText(QString("Author: Bartłomiej Wójtowicz"), this->height()/50, QColor(107, 142, 35));
@@ -108,7 +110,8 @@ void Game::displayHallOfFame()
     QList< QPair<QString, int> > bestScores = readBestScoresFromFile();
     for(int i=0; i<bestScores.size(); i++)
     {
-        QGraphicsTextItem * placeAndName = makeDefaultText(QString::number(i+1) + QString(". ") + bestScores[i].first, textSize, QColor(107,142,35));
+        QGraphicsTextItem * placeAndName = makeDefaultText(QString::number(i+1) + QString(". ") + bestScores[i].first, textSize,
+                                                           QColor(107,142,35));
         placeAndName->setPos(textX, textY + textGap * i);
         scene->addItem(placeAndName);
 
@@ -139,7 +142,8 @@ void Game::displayUsernameGettingScreen()
     scene->clear();
 
     QGraphicsTextItem * typeInText = makeDefaultText(QString("Type in your nickname"), this->width()/30, QColor(107,142,35));
-    typeInText->setPos(this->width()/2 - typeInText->boundingRect().width()/2, this->height()/2 - typeInText->boundingRect().height()/2 - this->height() / 5);
+    typeInText->setPos(this->width()/2 - typeInText->boundingRect().width()/2, 
+                       this->height()/2 - typeInText->boundingRect().height()/2 - this->height() / 5);
     scene->addItem(typeInText);
 
     QLineEdit * nicknameLine = new QLineEdit();
@@ -159,7 +163,8 @@ void Game::displayUsernameGettingScreen()
     int buttonY = this->height()/2 + this->height()/6;
     int buttonTextSize = buttonHeight/2;
 
-    Button * backButton = makeDefaultButton(buttonX - buttonWidth -1, buttonY, buttonWidth, buttonHeight, QString("Back"), buttonTextSize);
+    Button * backButton = makeDefaultButton(buttonX - buttonWidth -1, buttonY, buttonWidth, buttonHeight, QString("Back"),
+                                            buttonTextSize);
     connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
 
     Button * startButton = makeDefaultButton(buttonX+1, buttonY, buttonWidth, buttonHeight, QString("I'm ready!"), buttonTextSize);
@@ -225,7 +230,8 @@ void Game::displayEscapeWindow()
     scene->addItem(window);
 
     QGraphicsTextItem * whatToDo = makeDefaultText(QString("What do you want to do?"), this->width()/40, QColor(107,142,35));
-    whatToDo->setPos(this->width()/2 - whatToDo->boundingRect().width()/2, this->height()/2 - whatToDo->boundingRect().height()/2 - this->height() / 6);
+    whatToDo->setPos(this->width()/2 - whatToDo->boundingRect().width()/2, 
+                     this->height()/2 - whatToDo->boundingRect().height()/2 - this->height() / 6);
     whatToDo->setZValue(1);
     scene->addItem(whatToDo);
 
@@ -235,10 +241,12 @@ void Game::displayEscapeWindow()
     int buttonY = this->height() / 2 - buttonHeight / 2;
     int buttonTextSize = buttonHeight/2;
 
-    Button * resumeButton = makeDefaultButton(buttonX, buttonY - this->height() / 15, buttonWidth, buttonHeight, QString("Resume"), buttonTextSize);
+    Button * resumeButton = makeDefaultButton(buttonX, buttonY - this->height() / 15, buttonWidth, buttonHeight, QString("Resume"),
+                                              buttonTextSize);
     connect(resumeButton, SIGNAL(clicked()), this, SLOT(clearAndResume()));
 
-    Button * mainMenuButton = makeDefaultButton(buttonX, buttonY + this->height() / 30, buttonWidth, buttonHeight, QString("Main menu"), buttonTextSize);
+    Button * mainMenuButton = makeDefaultButton(buttonX, buttonY + this->height() / 30, buttonWidth, buttonHeight, QString("Main menu"),
+                                                buttonTextSize);
     connect(mainMenuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
 }
 
@@ -257,7 +265,8 @@ void Game::displayGameOverWindow()
     scene->addItem(scoreBackground);
 
     int scoreTextFontSize = windowWidth / 20;
-    QGraphicsTextItem * scoreText = makeDefaultText(QString("Your score: ") + QString::number(player->getScore()), scoreTextFontSize, QColor(107,142,35) );
+    QGraphicsTextItem * scoreText = makeDefaultText(QString("Your score: ") + QString::number(player->getScore()), scoreTextFontSize,
+                                                    QColor(107,142,35));
     int scoreTextX = windowX + windowWidth/2 - scoreText->boundingRect().width() / 2;
     scoreText->setPos(scoreTextX , windowY);
     scoreText->setZValue(1);
@@ -269,10 +278,12 @@ void Game::displayGameOverWindow()
     int buttonMiddleY = windowY + windowY / 1.5;
     int buttonTextSize = windowWidth / 30;
 
-    Button * playAgainButton = makeDefaultButton(buttonMiddleX, buttonMiddleY, buttonWidth, buttonHeight, QString("Just one more time!"), buttonTextSize);
+    Button * playAgainButton = makeDefaultButton(buttonMiddleX, buttonMiddleY, buttonWidth, buttonHeight, QString("Just one more time!"),
+                                                 buttonTextSize);
     connect(playAgainButton, &Button::clicked, this, [=]{startGame(player->getPlayerName()); } );
 
-    Button * mainMenuButton = makeDefaultButton(buttonMiddleX, buttonMiddleY + windowHeight/5, buttonWidth, buttonHeight, QString("Back to main menu"), buttonTextSize);
+    Button * mainMenuButton = makeDefaultButton(buttonMiddleX, buttonMiddleY + windowHeight/5, buttonWidth, buttonHeight,
+                                                QString("Back to main menu"), buttonTextSize);
     connect(mainMenuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
 }
 
