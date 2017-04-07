@@ -361,9 +361,11 @@ QList<QPair<QString, int> > Game::readBestScoresFromFile()
     }
     else
     {
-        QMessageBox::critical(this, QString("Error"), QString("This copy of EndlesSnake is corrupted."));
-        close();
+        QFile makeFile("scrs/scores.dat");
+        makeFile.open(QIODevice::WriteOnly);
+        makeFile.close();
     }
+
     return bestScores;
 }
 
