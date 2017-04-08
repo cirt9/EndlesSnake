@@ -170,6 +170,7 @@ void Game::startGame(QString playerName)
 {
     scene->clear();
     restoreAppropriateSceneRectSize();
+    gamePaused = false;
     changingPauseStatusAllowed = true;
 
     setPlayer(playerName);
