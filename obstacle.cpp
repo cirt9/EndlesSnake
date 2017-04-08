@@ -1,6 +1,7 @@
 #include "obstacle.h"
 
-Obstacle::Obstacle(int obstacleWidth, int obstacleHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer, QGraphicsItem * parent) : QGraphicsRectItem(parent)
+Obstacle::Obstacle(int obstacleWidth, int obstacleHeight, int speed, int screenW, int screenH, QColor color, QTimer * timer,
+                   QGraphicsItem * parent) : QGraphicsRectItem(parent)
 {
     moveTimer = timer;
     moveSpeed = speed;
